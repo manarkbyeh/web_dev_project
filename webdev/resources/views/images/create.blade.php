@@ -1,0 +1,5 @@
+@extends('main') @section('title', '| Create New Post') @section('stylesheets') {!! Html::style('css/parsley.css') !!} @endsection @section('content') {!! Form::open(['route' => 'testimonials.store',"id"=>"addtestimonial", 'files'=>true]) !!} {{ Form::label('name','Titel')}}
+{{ Form::text('name',old('name'),array('class' =>'form-control '))}} {{ Form::label('url','Url:')}} {{ Form::text('url',old('url'),array('class' =>'form-control '))}} {{ Form::label('text','Inhoud',["class" => 'form-space'])}} {{ Form::textarea('text',old('text'),array('class'
+=>'form-control'))}} {{ Form::label('image_cover','Foto',["class" => 'form-space'])}} {{ Form::file('image_cover')}} {{ Form::submit('Toevoegen',array('class' =>'btn btn-success addtestimonialbtn btn-lg bottom_buttom btn-block', 'style'=>'margin-top:20px'))}}
+<center><i class="fa fa-spinner fa-spin fa-2x loading hidden"></i></center>
+{!! Form::close() !!} @endsection @section('scripts') {!! Html::script('js/parsley.min.js') !!} @endsection
