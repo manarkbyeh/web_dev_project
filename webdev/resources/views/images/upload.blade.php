@@ -59,8 +59,8 @@
 
       $('#upload').attr('style', 'display:block');
       $('#img').attr('style', '');
-      $('#previewing').attr('width', '100%');
-      $('#previewing').attr('height', 'auto');
+
+      $('#previewing').attr('style', 'width:100%;max-height:400px');
     };
   });
 </script>

@@ -22,5 +22,5 @@ Route::get('/upload', function () {
 
 
 Route::resource('Guest', 'GastController');
-
+Route::get('Guest/{id}/delete', ['uses'=>'GastController@delete','as'=>'Guest.delete']);
 Route::resource('/image', 'ImageController');

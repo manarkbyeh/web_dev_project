@@ -18,7 +18,8 @@ class GastController extends Controller
     */
     public function index()
     {
-        //
+        $gasts = Gast::all();
+        return view("manageGast.index",["gasts"=>$gasts]);
     }
     
     /**
@@ -128,8 +129,19 @@ class GastController extends Controller
     * @param  int  $id
     * @return \Illuminate\Http\Response
     */
+    public function delete($id)
+    {
+        $gast = Gast::find($id);
+        return view('manageGast.delete')->withGast(  $gast);
+    }
     public function destroy($id)
     {
-        //
+        $gast = Gast::find($id);
+        $gast_id= $gast->id;
+        $gast->delete();
+        
+        Session::flash('success', 'The  gast was successfully deleted!');
+        return ;
+        
     }
 }

@@ -45,30 +45,26 @@ class ImageController extends Controller
     */
     public function store(Request $request)
     {
-        $image = new Image();
-        $gast = new Gast();
-        if ($request->hasFile('path')) {
-            $pic = $request->file('path');
-            
-            $fileName = time() . '.'.$pic->getClientOriginalExtension();
-            if (Image::make($pic)->save(public_path('images/'.$fileName))) {
-                $image->path = $fileName;
-            }
-        }
-        $image->guest_id=  1;
-        if($image->move()){
-            Session::flash('success', 'The blog gast was successfully save!');
-        }
-        return redirect('/image');
         
-        /*   $image = new Image();
+        $ck =isset($_COOKIE['xvz'])?$_COOKIE['xvz']:'';
+        $ip = $request->ip();
+        
+        if($ck != ''){
+            $gast =  Gast::where('cookies',$ip)->get();
+        }
+        $gast =  Gast::where('ip',$ip)
+        ->orwhere('cookies',$ip)->get();
+        
+        $image = new Image();
+        $gast=new Gast();
         
         if($request->hasFile('image')):
         $image->path = $request->image->store('images');
         endif;
-        $image->guest_id=1;
+        $image->guest_id=1 ;
         $image->save();
-        return redirect('/image');*/
+        return redirect('/image');
+        
     }
     
     /**
