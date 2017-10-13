@@ -32,24 +32,20 @@ class GastController extends Controller
         $ck =isset($_COOKIE['xvz'])?$_COOKIE['xvz']:'';
         $ip = $request->ip();
         $gast =  Gast::where('ip',$ip)
-        ->orwhere('cookies',$ip)->get();
-        // dd($gast);
-        if($gast->count()){
-            
-            // if($gast->ip != $ip){
-            //     $gast->ip = $ip;
-            //     $gast->save();
-            // }else if(isset($gast) && $gast->cookies != $ck){
-            //     $mytime = Carbon::now();
-            //     $ck= md5($mytime->toDateTimeString().$ip);
-            
-            //     $gast->cookies = $cookies;
-            //     if($gast->save() ){
-            //         setcookie('xvz', $ck, time() +  3600*24*30*12, '/');
-            //     }
-            // }
-            return redirect('/');
-            
+        ->orwhere('cookies',$ck)->first();
+        if($gast !=null){
+            if($gast->ip != $ip){
+                $gast->ip = $ip;
+                $gast->save();
+            }else if($gast->cookies != $ck){
+                $mytime = Carbon::now();
+                $ck= md5($mytime->toDateTimeString().$ip);
+                $gast->cookies = $ck;
+                if($gast->save() ){
+                    setcookie('xvz', $ck, time() +  3600*24*30*12, '/');
+                }
+            }
+            return redirect('/gallery');
         }
         return view('inschrijven');
     }
@@ -64,11 +60,11 @@ class GastController extends Controller
     {
         $ip =  $request->ip();
         $mytime = Carbon::now();
-        $cok= md5($mytime->toDateTimeString().$ip);
+        $cok= md5($mytime->toDateTimeString());
         
         $this->validate($request, array(
         'name'         => 'required|max:255',
-        'email'          => 'required'
+        'email'          => 'required|unique:gasts'
         ));
         
         // store in the database
@@ -80,12 +76,9 @@ class GastController extends Controller
         $gast->cookies = $cok;
         if($gast->save()){
             setcookie('xvz', $cok, time() +  3600*24*30*12, '/');
-            
-            Session::flash('success', 'The blog gast was successfully save!');
-            return ;
+            return redirect('/image');
         }
-        
-        Session::flash('errors', 'The blog gast was successfully save!');
+        redirect::back()->with('errors', 'Something went wrong , try again');
         
     }
     
@@ -137,7 +130,6 @@ class GastController extends Controller
     public function destroy($id)
     {
         $gast = Gast::find($id);
-        $gast_id= $gast->id;
         $gast->delete();
         
         Session::flash('success', 'The  gast was successfully deleted!');

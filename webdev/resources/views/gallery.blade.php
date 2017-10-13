@@ -16,10 +16,12 @@
           </div>
         </div>
       </div>
+
+      {{csrf_field()}}
       <!-- break -->
       <div clas="col-md-9">
         @foreach ($images as $image)
-        <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="col-md-3 col-xs-6 ">
           <div class="post-container">
             <div class="post-option">
               <ul class="list-options">
@@ -29,12 +31,14 @@
             </div>
             <div class="post-image">
               <a href="{{asset('/storage/'.$image->path)}}" class="img-group-gallery" title="Lorem ipsum dolor sit amet">
-<img src="{{asset('/storage/'.$image->path)}}" class="img-responsive" alt="fransisca gallery">
+<img src="{{asset('/storage/'.$image->path)}}" class="img-responsive" data-id="{{$image->id}}" alt="fransisca gallery">
 </a>
             </div>
             <div class="post-meta">
               <ul class="list-meta list-inline">
-                <li><i class="fa fa-heart"></i> 944</li>
+                <li><i class="fa fa-heart"></i>
+                  <label>{{$image->likes->count()}}</label>
+                </li>
               </ul>
             </div>
           </div>
@@ -51,12 +55,37 @@
 
 @endsection @section('script')
 
-<<script>
+<script>
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $("meta[name='csrf-token']").attr("content")
+    }
+  });
 
-  $(document).ready(function() { $('.heart').click(function(){ $.ajax({ url: ".php", // Url to which the request is send type: "POST", // Type of request to be send, called as method data: new FormData(this), // Data sent to server, a set of key/value pairs
-  representing form fields and values contentType: false, cache: false, // To unable request pages to be cached processData:false, // To send DOMDocument or non processed data file it is set to false (i.e. data should not be in the form of string) success:
-  function(data) // A function to be called if request succeeds { $('#loading').hide(); $("#message").html(data); } }); }); });
+  btn.attr('idimg')
 
-  </script>
+  $(document).ready(function() {
+    $('.heart').on('click', function() {
+      var btn = $(this);
 
-  @endsection
+      $.ajax({
+        url: "like",
+        type: "POST",
+        data: { //this
+          image1: btn.attr('idimg')
+        },
+        success: function(data) {
+          var nblikes = btn.parent().parent().parent().next().next().children().children().children("label");
+          if (data == "add") {
+            nblikes.text(parseInt(nblikes.text()) + 1);
+          } else
+          if (data == "remove") {
+            nblikes.text(parseInt(nblikes.text()) - 1);
+          }
+        }
+      });
+    });
+  });
+</script>
+
+@endsection

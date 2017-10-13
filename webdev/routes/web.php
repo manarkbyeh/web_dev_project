@@ -19,8 +19,9 @@ Route::get('/upload', function () {
     return view('images.upload');
 });
 
-
-
+Route::post('like', 'LikeController@like');
 Route::resource('Guest', 'GastController');
-Route::get('Guest/{id}/delete', ['uses'=>'GastController@delete','as'=>'Guest.delete']);
+Route::get('Guest/{id}/delete',['uses'=>'GastController@delete','as'=>'Guest.delete']);
 Route::resource('/image', 'ImageController');
+
+?>
