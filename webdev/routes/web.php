@@ -23,5 +23,6 @@ Route::post('like', 'LikeController@like');
 Route::resource('Guest', 'GastController');
 Route::get('Guest/{id}/delete',['uses'=>'GastController@delete','as'=>'Guest.delete']);
 Route::resource('/image', 'ImageController');
+Route::get('image/{id}/delete',['uses'=>'ImageController@delete','as'=>'image.delete']);
 
 ?>

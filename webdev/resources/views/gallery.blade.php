@@ -39,6 +39,14 @@
                 <li><i class="fa fa-heart"></i>
                   <label>{{$image->likes->count()}}</label>
                 </li>
+                <li class="pull-right">
+
+                  <a href="{{route('image.delete',$image->id)}}" class="btn">
+                    <i class="fa fa-times" aria-hidden="true">    </i>
+                  </a>
+
+                </li>
+
               </ul>
             </div>
           </div>
@@ -56,23 +64,21 @@
 @endsection @section('script')
 
 <script>
-  $.ajaxSetup({
-    headers: {
-      'X-CSRF-TOKEN': $("meta[name='csrf-token']").attr("content")
-    }
-  });
-
-  btn.attr('idimg')
-
   $(document).ready(function() {
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $("meta[name='csrf-token']").attr("content")
+      }
+    });
+
     $('.heart').on('click', function() {
       var btn = $(this);
 
       $.ajax({
         url: "like",
         type: "POST",
-        data: { //this
-          image1: btn.attr('idimg')
+        data: {
+          image_id: btn.attr('idimg')
         },
         success: function(data) {
           var nblikes = btn.parent().parent().parent().next().next().children().children().children("label");
