@@ -16,5 +16,9 @@
     <link href="{{ asset('css/colorbox.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/responsive.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/animate.css') }}" rel="stylesheet">
+    
+    
+    <link href="{{ asset('sweet-alert2/sweetalert2.min.css') }}" rel="stylesheet">
 </head>
 @yield('stylesheets')

@@ -1,21 +1,21 @@
-@extends('main') @section('content')
-<div class="container">
-
-  <div class="col-md-6 col-xs-6 ">
-    <div class="post-container">
-
-      <div class="post-image">
-        <a href="{{asset('/storage/'.$image->path)}}" class="img-group-gallery" title="Lorem ipsum dolor sit amet">
-<img src="{{asset('/storage/'.$image->path)}}" class="img-responsive" data-id="{{$image->id}}" alt="fransisca gallery">
-</a>
+@extends('main') @section('title', '| All Gast') @section('content')
+<div class="modal fade">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
+      <div class="modal-body">
+        <p>Modal body text goes here.</p>
+      </div>
+      <div class="modal-footer">
+        {{ Form::open(['route'=>['image.destroy',$image->id],'method'=>'Delete'])}} {{Form::submit('Verwijderen',["class" => 'btn btn-secondary'])}} {{Form::close()}}
 
+      </div>
     </div>
   </div>
-
-
-  {{ Form::open(['route'=>['image.destroy',$image->id],"id"=>"deletenews",'method'=>'Delete'])}} {{Form::submit('Verwijderen',["class" => 'btn btn-block btn-sm deletenewsbtn'])}} {{Form::close()}}
-
-
 </div>
 @endsection

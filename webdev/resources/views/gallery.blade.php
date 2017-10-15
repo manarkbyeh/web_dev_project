@@ -23,26 +23,25 @@
         @foreach ($images as $image)
         <div class="col-md-3 col-xs-6 ">
           <div class="post-container">
-            <div class="post-option">
-              <ul class="list-options">
 
-                <li><a href="javascript:void(0)" class="heart" idimg="{{$image->id}}"><i class="fa fa-heart"></i> <span>Love</span></a></li>
-              </ul>
-            </div>
-            <div class="post-image">
+            <div class="post-image" >
+
               <a href="{{asset('/storage/'.$image->path)}}" class="img-group-gallery" title="Lorem ipsum dolor sit amet">
-<img src="{{asset('/storage/'.$image->path)}}" class="img-responsive" data-id="{{$image->id}}" alt="fransisca gallery">
 </a>
+<div class="img" style="background-image:url({{asset('/storage/'.$image->path)}});"></div>
             </div>
             <div class="post-meta">
               <ul class="list-meta list-inline">
-                <li><i class="fa fa-heart"></i>
-                  <label>{{$image->likes->count()}}</label>
+                <li>
+                  <a href="javascript:void(0)" class="heart animated" idimg="{{$image->id}}">
+                    <i class="fa fa-heart-o fa-lg"></i>
+                    <label>{{$image->likes->count()}}</label>
+                  </a>
                 </li>
                 <li class="pull-right">
 
-                  <a href="{{route('image.delete',$image->id)}}" class="btn">
-                    <i class="fa fa-times" aria-hidden="true">    </i>
+        <a href="javascript:void(0)" idimg="{{$image->id}}" class="btndelete" data-token="{{ csrf_token() }}">
+                    <i class="fa fa-remove fa-lg" aria-hidden="true">    </i>
                   </a>
 
                 </li>
@@ -81,17 +80,80 @@
           image_id: btn.attr('idimg')
         },
         success: function(data) {
-          var nblikes = btn.parent().parent().parent().next().next().children().children().children("label");
+          var nblikes = btn.children("label");
           if (data == "add") {
+            btn.animateCss('bounceIn');
             nblikes.text(parseInt(nblikes.text()) + 1);
+            btn.children("i").attr('class','fa fa-heart fa-lg');
+            btn.children("i").css('color','red');
           } else
           if (data == "remove") {
+            btn.animateCss('bounceIn');
             nblikes.text(parseInt(nblikes.text()) - 1);
+            btn.children("i").attr('class','fa fa-heart-o fa-lg');
+            btn.children("i").css('color','#5A9EF0');
           }
         }
       });
     });
+
+
+
+    $("body").on("click", ".btndelete", function() {
+      var val = $(this);
+      var token = $(this).data('token');
+
+      swal({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-success",
+        cancelButtonClass: "btn btn-danger ",
+        buttonsStyling: false
+      }).then(function() {
+        $.ajax({
+          type: "post",
+          url: "image/"+val.attr("idimg")+"/delete",
+          data:{_method:'delete',_token:token}
+        }).done(function(data) {
+          var res = data.split(";");
+          if (res[0] == "global") {
+            swal({
+              title: "ERRUE",
+              text: res[1],
+              type: "warning",
+              cancelButton: true,
+              cancelButtonText: "ok",
+              cancelButtonClass: "btn btn-danger m-l-10",
+            });
+          } else if (res[0] == "") {
+           
+          	 val.parents(".col-xs-6").animateCss('zoomOutUp');
+             setTimeout(function() {
+              val.parents(".col-xs-6").remove();
+             }, 1000);
+          }
+        });
+        return false;
+      });
+
+    });
+
+
   });
+
+  
+  $.fn.extend({
+        animateCss: function (animationName) {
+            var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+            this.addClass('animated ' + animationName).one(animationEnd, function () {
+                $(this).removeClass('animated ' + animationName);
+            });
+        }
+    });
 </script>
 
 @endsection

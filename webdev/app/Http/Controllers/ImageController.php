@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use Carbon\Carbon;
 
-
 class ImageController extends Controller
 {
     /**
@@ -27,7 +26,7 @@ class ImageController extends Controller
     {
         
         $images =Image::with('likes')->get();
-        return view("gallery",compact("images"));
+        return view("gallery", compact("images"));
     }
     
     /**
@@ -48,19 +47,19 @@ class ImageController extends Controller
     */
     public function store(Request $request)
     {
-        $idGeust = $this->checkGeust($request);
-        if($idGeust == false){
+      
+        $idGeust = $this->checkGeust(\Request::ip());
+        if ($idGeust == false) {
             return redirect('/Guest/create');
         }
         $image = new Image();
         
-        if($request->hasFile('image')):
-        $image->path = $request->image->store('images');
+        if ($request->hasFile('image')) :
+            $image->path = $request->image->store('images');
         endif;
         $image->guest_id= $idGeust;
         $image->save();
-        return redirect('/image')->with('Success','successfully saved');
-        
+        return redirect('/image')->with('Success', 'successfully saved');
     }
     
     /**
@@ -103,36 +102,37 @@ class ImageController extends Controller
     * @param  int  $id
     * @return \Illuminate\Http\Response
     */
-    public function destroy(Request $request,$id)
+    
+    
+    public function delete($id)
     {
-        if($request->ajax()){
-            $idGuest = $this->checkGeust($request);
-            if($idGeust == false){
-                return false;
-            }else{
-                $image = Image::find($id);
-                $image->delete();
-                return true;
-            }
+            $idGuest = $this->checkGeust(\Request::ip());
+
+        if ($idGuest === false) {
+            return 'global';
+        } else {
+            $image = Image::find($id);
+            $image->delete();
+            return '';
         }
-        redirect('/');
+        return  redirect('/');
     }
     
     
-    private function checkGeust($request){
+    private function checkGeust($ip)
+    {
         $ck =isset($_COOKIE['xvz'])?$_COOKIE['xvz']:'';
-        $ip = $request->ip();
-        $gast =  Gast::where('ip',$ip)
-        ->orwhere('cookies',$ck)->first();
-        if($gast !=null){
-            if($gast->ip != $ip){
+        $gast =  Gast::where('ip', $ip)
+        ->orwhere('cookies', $ck)->first();
+        if ($gast !=null) {
+            if ($gast->ip != $ip) {
                 $gast->ip = $ip;
                 $gast->save();
-            }else if($gast->cookies != $ck){
+            } elseif ($gast->cookies != $ck) {
                 $mytime = Carbon::now();
                 $ck= md5($mytime->toDateTimeString().$ip);
                 $gast->cookies = $ck;
-                if($gast->save() ){
+                if ($gast->save()) {
                     setcookie('xvz', $ck, time() +  3600*24*30*12, '/');
                 }
             }

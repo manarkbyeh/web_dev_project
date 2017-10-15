@@ -335,8 +335,14 @@ h6 {
     height: 350px
 }
 
-.post-image img {
-    max-height: 330px;
+.post-image .img {
+    position: relative;
+    float: left;
+    width: 100%;
+    height: 100%;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .post-image img:focus {

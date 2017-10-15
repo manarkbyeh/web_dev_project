@@ -21,8 +21,15 @@ Route::get('/upload', function () {
 
 Route::post('like', 'LikeController@like');
 Route::resource('Guest', 'GastController');
-Route::get('Guest/{id}/delete',['uses'=>'GastController@delete','as'=>'Guest.delete']);
+Route::delete('Guest/{id}/delete', [
+    'as' => 'Guest.delete',
+    'uses' => 'GastController@delete'
+]);
+Route::get('Guest/{id}/delete', ['uses'=>'GastController@delete','as'=>'Guest.delete']);
 Route::resource('/image', 'ImageController');
-Route::get('image/{id}/delete',['uses'=>'ImageController@delete','as'=>'image.delete']);
-
-?>
+Route::delete('image/{id}/delete', [
+    'as' => 'image.delete',
+    'uses' => 'ImageController@delete'
+]);
+//Route::get('image/{id}/delete', ['uses'=>'ImageController@delete','as'=>'image.delete']);
+//Route::post ("image/delete", 'ImageController@destroy');

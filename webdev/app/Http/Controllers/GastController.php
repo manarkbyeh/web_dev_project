@@ -19,7 +19,7 @@ class GastController extends Controller
     public function index()
     {
         $gasts = Gast::all();
-        return view("manageGast.index",["gasts"=>$gasts]);
+        return view("manageGast.index", ["gasts"=>$gasts]);
     }
     
     /**
@@ -31,17 +31,17 @@ class GastController extends Controller
     {
         $ck =isset($_COOKIE['xvz'])?$_COOKIE['xvz']:'';
         $ip = $request->ip();
-        $gast =  Gast::where('ip',$ip)
-        ->orwhere('cookies',$ck)->first();
-        if($gast !=null){
-            if($gast->ip != $ip){
+        $gast =  Gast::where('ip', $ip)
+        ->orwhere('cookies', $ck)->first();
+        if ($gast !=null) {
+            if ($gast->ip != $ip) {
                 $gast->ip = $ip;
                 $gast->save();
-            }else if($gast->cookies != $ck){
+            } elseif ($gast->cookies != $ck) {
                 $mytime = Carbon::now();
                 $ck= md5($mytime->toDateTimeString().$ip);
                 $gast->cookies = $ck;
-                if($gast->save() ){
+                if ($gast->save()) {
                     setcookie('xvz', $ck, time() +  3600*24*30*12, '/');
                 }
             }
@@ -74,12 +74,11 @@ class GastController extends Controller
         $gast->email = $request->email;
         $gast->ip = $ip;
         $gast->cookies = $cok;
-        if($gast->save()){
+        if ($gast->save()) {
             setcookie('xvz', $cok, time() +  3600*24*30*12, '/');
             return redirect('/image');
         }
         redirect::back()->with('errors', 'Something went wrong , try again');
-        
     }
     
     /**
@@ -122,18 +121,13 @@ class GastController extends Controller
     * @param  int  $id
     * @return \Illuminate\Http\Response
     */
+    
     public function delete($id)
     {
-        $gast = Gast::find($id);
-        return view('manageGast.delete')->withGast(  $gast);
-    }
-    public function destroy($id)
-    {
-        $gast = Gast::find($id);
+        $gast=  Gast::find($id);
         $gast->delete();
-        
-        Session::flash('success', 'The  gast was successfully deleted!');
-        return ;
-        
+          
+      
+        return  redirect('/');
     }
 }
