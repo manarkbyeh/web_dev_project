@@ -45,7 +45,7 @@ class GastController extends Controller
                     setcookie('xvz', $ck, time() +  3600*24*30*12, '/');
                 }
             }
-            return redirect('/gallery');
+            return redirect('/image');
         }
         return view('inschrijven');
     }
@@ -126,8 +126,8 @@ class GastController extends Controller
     {
         $gast=  Gast::find($id);
         $gast->delete();
-          
-      
-        return  redirect('/');
+        
+        
+        return  "";
     }
 }

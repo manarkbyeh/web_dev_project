@@ -24,11 +24,11 @@
         <div class="col-md-3 col-xs-6 ">
           <div class="post-container">
 
-            <div class="post-image" >
+            <div class="post-image">
 
               <a href="{{asset('/storage/'.$image->path)}}" class="img-group-gallery" title="Lorem ipsum dolor sit amet">
-</a>
-<div class="img" style="background-image:url({{asset('/storage/'.$image->path)}});"></div>
+              </a>
+              <div class="img" style="background-image:url({{asset('/storage/'.$image->path)}});"></div>
             </div>
             <div class="post-meta">
               <ul class="list-meta list-inline">
@@ -38,13 +38,15 @@
                     <label>{{$image->likes->count()}}</label>
                   </a>
                 </li>
-                <li class="pull-right">
 
-        <a href="javascript:void(0)" idimg="{{$image->id}}" class="btndelete" data-token="{{ csrf_token() }}">
+                @if($image->guest_id==$idgust)
+                <li class="pull-right">
+                  <a href="javascript:void(0)" idimg="{{$image->id}}" class="btndelete" data-token="{{ csrf_token() }}">
                     <i class="fa fa-remove fa-lg" aria-hidden="true">    </i>
                   </a>
 
                 </li>
+                @endif
 
               </ul>
             </div>
@@ -84,14 +86,17 @@
           if (data == "add") {
             btn.animateCss('bounceIn');
             nblikes.text(parseInt(nblikes.text()) + 1);
-            btn.children("i").attr('class','fa fa-heart fa-lg');
-            btn.children("i").css('color','red');
+            btn.children("i").attr('class', 'fa fa-heart fa-lg');
+            btn.children("i").css('color', 'red');
           } else
           if (data == "remove") {
             btn.animateCss('bounceIn');
             nblikes.text(parseInt(nblikes.text()) - 1);
-            btn.children("i").attr('class','fa fa-heart-o fa-lg');
-            btn.children("i").css('color','#5A9EF0');
+            btn.children("i").attr('class', 'fa fa-heart-o fa-lg');
+            btn.children("i").css('color', '#5A9EF0');
+          } else
+          if (data == "redirect") {
+            top.location = "{{url('/Guest/create')}}";
           }
         }
       });
@@ -116,26 +121,41 @@
       }).then(function() {
         $.ajax({
           type: "post",
-          url: "image/"+val.attr("idimg")+"/delete",
-          data:{_method:'delete',_token:token}
+          url: "image/" + val.attr("idimg") + "/delete",
+          data: {
+            _method: 'delete',
+            _token: token
+          }
         }).done(function(data) {
           var res = data.split(";");
           if (res[0] == "global") {
             swal({
               title: "ERRUE",
-              text: res[1],
+              text: "you need to register !!!",
+              type: "warning",
+              cancelButton: true,
+              cancelButtonText: "ok",
+              cancelButtonClass: "btn btn-danger m-l-10",
+            }).then(function() {
+              top.location = "{{url('/Guest/create')}}";
+            });
+          } else if (res[0] == "") {
+
+            val.parents(".col-xs-6").animateCss('zoomOutUp');
+            setTimeout(function() {
+              val.parents(".col-xs-6").remove();
+            }, 1000);
+          } else if (res[0] == "no") {
+            swal({
+              title: "ERRUE",
+              text: "you can't delete this pic !!!",
               type: "warning",
               cancelButton: true,
               cancelButtonText: "ok",
               cancelButtonClass: "btn btn-danger m-l-10",
             });
-          } else if (res[0] == "") {
-           
-          	 val.parents(".col-xs-6").animateCss('zoomOutUp');
-             setTimeout(function() {
-              val.parents(".col-xs-6").remove();
-             }, 1000);
           }
+
         });
         return false;
       });
@@ -145,15 +165,15 @@
 
   });
 
-  
+
   $.fn.extend({
-        animateCss: function (animationName) {
-            var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
-            this.addClass('animated ' + animationName).one(animationEnd, function () {
-                $(this).removeClass('animated ' + animationName);
-            });
-        }
-    });
+    animateCss: function(animationName) {
+      var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+      this.addClass('animated ' + animationName).one(animationEnd, function() {
+        $(this).removeClass('animated ' + animationName);
+      });
+    }
+  });
 </script>
 
 @endsection

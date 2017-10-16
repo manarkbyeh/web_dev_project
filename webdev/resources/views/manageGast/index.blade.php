@@ -33,13 +33,13 @@
           <td>{{ $gast->email }}</td>
           <td>{{ date('M j, Y', strtotime($gast->created_at)) }}</td>
           <td>
-      
 
-        <a href="javascript:void(0)" idguest="{{$gast->id}}" class="btn btn-default btn-sm btndelete" data-token="{{ csrf_token() }}">
-        Delete
-                  </a>
 
-        </td>
+            <a href="javascript:void(0)" idguest="{{$gast->id}}" class="btn btn-default btn-sm btndelete" data-token="{{ csrf_token() }}">
+Delete
+</a>
+
+          </td>
         </tr>
 
         @endforeach
@@ -51,9 +51,10 @@
   </div>
 </div>
 
-@endsection;
+@endsection; @section('script')
 <script>
-      $("body").on("click", ".btndelete", function() {
+  $(document).ready(function() {
+    $("body").on("click", ".btndelete", function() {
       var val = $(this);
       var token = $(this).data('token');
 
@@ -70,8 +71,11 @@
       }).then(function() {
         $.ajax({
           type: "post",
-          url: "Guest/"+val.attr("idguest")+"/delete",
-          data:{_method:'delete',_token:token},
+          url: "Guest/" + val.attr("idguest") + "/delete",
+          data: {
+            _method: 'delete',
+            _token: token
+          },
         }).done(function(data) {
           var res = data.split(";");
           if (res[0] == "global") {
@@ -84,11 +88,11 @@
               cancelButtonClass: "btn btn-danger m-l-10",
             });
           } else if (res[0] == "") {
-           
-          	 val.parents(".col-xs-6").animateCss('zoomOutUp');
-             setTimeout(function() {
-              val.parents(".col-xs-6").remove();
-             }, 1000);
+
+            val.parents().parents('tr').animateCss('slideOutRight');
+            setTimeout(function() {
+              val.parents().parents('tr').remove();
+            }, 1000);
           }
         });
         return false;
@@ -99,13 +103,16 @@
 
   });
 
-  
+
   $.fn.extend({
-        animateCss: function (animationName) {
-            var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
-            this.addClass('animated ' + animationName).one(animationEnd, function () {
-                $(this).removeClass('animated ' + animationName);
-            });
-        }
-    });
+    animateCss: function(animationName) {
+      var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+      this.addClass('animated ' + animationName).one(animationEnd, function() {
+        $(this).removeClass('animated ' + animationName);
+      });
+    }
+  });
 </script>
+
+
+@endsection;

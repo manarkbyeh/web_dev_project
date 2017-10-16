@@ -26,7 +26,7 @@ class ImageController extends Controller
     {
         
         $images =Image::with('likes')->get();
-        return view("gallery", compact("images"));
+        return view("gallery", compact("images"))->with('idgust',$this->checkGeust(\Request::ip()));
     }
     
     /**
@@ -47,17 +47,16 @@ class ImageController extends Controller
     */
     public function store(Request $request)
     {
-      
+        
         $idGeust = $this->checkGeust(\Request::ip());
         if ($idGeust == false) {
             return redirect('/Guest/create');
         }
         $image = new Image();
-        
         if ($request->hasFile('image')) :
             $image->path = $request->image->store('images');
         endif;
-        $image->guest_id= $idGeust;
+        $image->guest_id = $idGeust;
         $image->save();
         return redirect('/image')->with('Success', 'successfully saved');
     }
@@ -106,38 +105,32 @@ class ImageController extends Controller
     
     public function delete($id)
     {
-            $idGuest = $this->checkGeust(\Request::ip());
-
+        $idGuest = $this->checkGeust(\Request::ip());
         if ($idGuest === false) {
             return 'global';
-        } else {
+        }
+        else {
+            
             $image = Image::find($id);
+            if($image->guest_id != $idGuest)
+            return 'no';
+            
             $image->delete();
             return '';
         }
-        return  redirect('/');
     }
     
     
     private function checkGeust($ip)
     {
-        $ck =isset($_COOKIE['xvz'])?$_COOKIE['xvz']:'';
-        $gast =  Gast::where('ip', $ip)
-        ->orwhere('cookies', $ck)->first();
-        if ($gast !=null) {
-            if ($gast->ip != $ip) {
-                $gast->ip = $ip;
-                $gast->save();
-            } elseif ($gast->cookies != $ck) {
-                $mytime = Carbon::now();
-                $ck= md5($mytime->toDateTimeString().$ip);
-                $gast->cookies = $ck;
-                if ($gast->save()) {
-                    setcookie('xvz', $ck, time() +  3600*24*30*12, '/');
-                }
-            }
-            return $gast->id;
+        $gast =  Gast::where('ip', $ip)->first();
+        if ($gast == null) {
+            
+            return false;
         }
-        return false;
+        else
+            return $gast->id;
     }
+    
+    
 }
