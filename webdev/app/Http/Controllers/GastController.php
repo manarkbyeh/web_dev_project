@@ -18,7 +18,7 @@ class GastController extends Controller
     */
     public function index()
     {
-        $gasts = Gast::all();
+        $gasts = Gast::withTrashed()->get();
         return view("manageGast.index", ["gasts"=>$gasts]);
     }
     
@@ -122,12 +122,24 @@ class GastController extends Controller
     * @return \Illuminate\Http\Response
     */
     
-    public function delete($id)
+    public function destroy($id)
     {
-        $gast=  Gast::find($id);
-        $gast->delete();
-        
-        
-        return  "";
+        $gast = Gast::withTrashed()->where('id',$id)->first();
+        if($gast != null && $gast->deleted_at == null){
+            $gast->delete();
+            return  "ok";
+        }else {
+            return "no";
+        }
+    }
+    public function restore($id)
+    {
+        $gast = Gast::withTrashed()->where('id',$id)->first();
+        if($gast != null && $gast->deleted_at != null){
+            $gast->restore();
+            return  "ok";
+        }else {
+            return "no";
+        }
     }
 }

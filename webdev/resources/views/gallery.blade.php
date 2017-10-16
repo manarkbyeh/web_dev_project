@@ -21,7 +21,7 @@
       <!-- break -->
       <div clas="col-md-9">
         @foreach ($images as $image)
-        <div class="col-md-3 col-xs-6 ">
+        <div class="col-md-3 col-sm-6 col-xs-12 ">
           <div class="post-container">
 
             <div class="post-image">
@@ -33,15 +33,20 @@
             <div class="post-meta">
               <ul class="list-meta list-inline">
                 <li>
-                  <a href="javascript:void(0)" class="heart animated" idimg="{{$image->id}}">
-                    <i class="fa fa-heart-o fa-lg"></i>
-                    <label>{{$image->likes->count()}}</label>
+                  <a href="javascript:void(0)" class="heart animated" data-idimg="{{$image->id}}">
+                    <i @if($image->m($idgust)->first()) class="fa fa-heart blue"  @else class="fa fa-heart" @endif ></i>
+                    <label> {{$image->likes->count()}} </label>
                   </a>
                 </li>
 
+
+
+
+
+
                 @if($image->guest_id==$idgust)
                 <li class="pull-right">
-                  <a href="javascript:void(0)" idimg="{{$image->id}}" class="btndelete" data-token="{{ csrf_token() }}">
+                  <a href="javascript:void(0)" data-idimg="{{$image->id}}" class="btndelete" data-token="{{ csrf_token() }}">
                     <i class="fa fa-remove fa-lg" aria-hidden="true">    </i>
                   </a>
 
@@ -79,21 +84,19 @@
         url: "like",
         type: "POST",
         data: {
-          image_id: btn.attr('idimg')
+          image_id: btn.attr('data-idimg')
         },
         success: function(data) {
           var nblikes = btn.children("label");
           if (data == "add") {
             btn.animateCss('bounceIn');
             nblikes.text(parseInt(nblikes.text()) + 1);
-            btn.children("i").attr('class', 'fa fa-heart fa-lg');
-            btn.children("i").css('color', 'red');
+            btn.children("i").addClass('blue');
           } else
           if (data == "remove") {
             btn.animateCss('bounceIn');
             nblikes.text(parseInt(nblikes.text()) - 1);
-            btn.children("i").attr('class', 'fa fa-heart-o fa-lg');
-            btn.children("i").css('color', '#5A9EF0');
+            btn.children("i").removeClass('blue');
           } else
           if (data == "redirect") {
             top.location = "{{url('/Guest/create')}}";
@@ -115,37 +118,40 @@
         showCancelButton: true,
         confirmButtonText: "Yes, delete it!",
         cancelButtonText: "No, cancel!",
-        confirmButtonClass: "btn btn-success",
+        confirmButtonClass: "btn btn-success  m-l-10",
         cancelButtonClass: "btn btn-danger ",
         buttonsStyling: false
       }).then(function() {
         $.ajax({
           type: "post",
-          url: "image/" + val.attr("idimg") + "/delete",
+          url: "image/" + val.attr("data-idimg") + "/delete",
           data: {
             _method: 'delete',
             _token: token
           }
         }).done(function(data) {
-          var res = data.split(";");
-          if (res[0] == "global") {
+          if (data == "global") {
             swal({
               title: "ERRUE",
               text: "you need to register !!!",
               type: "warning",
               cancelButton: true,
               cancelButtonText: "ok",
-              cancelButtonClass: "btn btn-danger m-l-10",
+              cancelButtonClass: "btn btn-danger",
             }).then(function() {
               top.location = "{{url('/Guest/create')}}";
             });
-          } else if (res[0] == "") {
+          } else if (data == "ok") {
+            swal("Good job!", "You clicked the button!", "success").then(function() {
+              setTimeout(function() {
+                val.parents(".col-xs-6").animateCss('zoomOutUp');
+              }, 700);
+              setTimeout(function() {
+                val.parents(".col-xs-6").remove();
+              }, 1700);
+            });
 
-            val.parents(".col-xs-6").animateCss('zoomOutUp');
-            setTimeout(function() {
-              val.parents(".col-xs-6").remove();
-            }, 1000);
-          } else if (res[0] == "no") {
+          } else if (data == "no") {
             swal({
               title: "ERRUE",
               text: "you can't delete this pic !!!",

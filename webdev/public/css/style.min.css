@@ -332,14 +332,14 @@ h6 {
 .post-image {
     background-color: #fff;
     padding: 15px;
-    height: 350px
+    height: 300px;
 }
 
 .post-image .img {
     position: relative;
     float: left;
     width: 100%;
-    height: 100%;
+    height: 110%;
     background-position: 50% 50%;
     background-repeat: no-repeat;
     background-size: cover;
@@ -351,13 +351,14 @@ h6 {
 
 .post-meta {
     padding: 15px;
-    background-color: #fff
+    padding-bottom: 0;
+    background-color: #fff;
 }
 
 .post-meta .list-meta,
 .post-meta .list-meta>li {
     font-size: 12px;
-    line-height: 14px
+    line-height: 14px;
 }
 
 .post-desc {
@@ -1712,4 +1713,39 @@ h6 {
     -ms-transition: all .3s ease-in-out;
     -o-transition: all .3s ease-in-out;
     transition: all .3s ease-in-out
+}
+
+.swal2-confirm.m-l-10 {
+    margin-right: 20px;
+}
+
+.centered {
+    text-align: center;
+}
+
+#previewing {
+    width: auto !important;
+}
+
+#upload {
+    float: none !important;
+    margin: auto;
+}
+
+.fa.fa-remove.fa-lg {
+    color: #6b6e80;
+}
+
+a.heart.animated {
+    text-decoration: none;
+    color: #6b6e80;
+}
+
+.post-meta a {
+    color: #6b6e80 !important;
+    text-decoration: none !important;
+}
+
+.blue {
+    color: #5d9cec !important;
 }

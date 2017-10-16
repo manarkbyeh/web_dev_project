@@ -17,8 +17,13 @@ class CreateImagesTable extends Migration
             $table->increments('id');
             $table->string('path')->default('default.jpg');
             $table->boolean('win')->default(0);
-            $table->integer('guest_id');
+            $table->integer('guest_id')->unsigned();
             $table->timestamps();
+            $table->softDeletes();
+            $table->foreign('guest_id')
+            ->references('id')
+            ->on('gasts')
+            ->onDelete('cascade');
         });
     }
     

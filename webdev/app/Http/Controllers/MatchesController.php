@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+Use  App\Match;
 
 class MatchesController extends Controller
 {
@@ -15,7 +16,7 @@ class MatchesController extends Controller
     {
         
         $match = Match::orderBy('id', 'desc')->first();
-        return view("home",["match"=>$match]);
+        return view("index",["match"=>$match]);
     }
     
     /**
@@ -25,7 +26,7 @@ class MatchesController extends Controller
     */
     public function create()
     {
-        //
+        return view('home.create');
     }
     
     /**
@@ -39,7 +40,7 @@ class MatchesController extends Controller
         $this->validate($request, array(
         'title'         => 'required|max:255',
         'voorwaarden'   => 'required',
-        'text'          => 'required',
+        'body'          => 'required',
         'start_at'         => 'required',
         'end_at'         => 'required',
         ));
@@ -48,7 +49,7 @@ class MatchesController extends Controller
         
         
         $matches->title = $request->title;
-        $matches->text = $request->text;
+        $matches->body = $request->body;
         $matches->start_at = $request->start_at;
         $matches->end_at = $request->end_at;
         $matches->voorwaarden = $request->voorwaarden;

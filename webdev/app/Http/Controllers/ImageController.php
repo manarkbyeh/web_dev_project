@@ -24,6 +24,8 @@ class ImageController extends Controller
     */
     public function index()
     {
+        // $im = Image::find(8)->m(8)->first();
+        // dd($im);
         
         $images =Image::with('likes')->get();
         return view("gallery", compact("images"))->with('idgust',$this->checkGeust(\Request::ip()));
@@ -106,7 +108,7 @@ class ImageController extends Controller
     public function delete($id)
     {
         $idGuest = $this->checkGeust(\Request::ip());
-        if ($idGuest === false) {
+        if ($idGuest == false) {
             return 'global';
         }
         else {
@@ -116,7 +118,7 @@ class ImageController extends Controller
             return 'no';
             
             $image->delete();
-            return '';
+            return 'ok';
         }
     }
     

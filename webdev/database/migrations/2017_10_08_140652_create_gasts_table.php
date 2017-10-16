@@ -22,6 +22,8 @@ class CreateGastsTable extends Migration
             $table->string('email')->unique();
             
             $table->timestamps();
+            $table->softDeletes();
+            
         });
     }
     

@@ -8,9 +8,9 @@
         <form action="{{url('/image')}}" method="post" style="widht:100%;margin-bottom:5px" enctype="multipart/form-data">
           {{ csrf_field() }}
           <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-12 centered">
               <label id="img" for="file" style="cursor: pointer;margin:40px 35%;" class="text-center">
-                <div id="image_preview"><img id="previewing" src="img/upload.png" /></div>
+                <div id="image_preview"><img id="previewing" class='center' src="img/upload.png" /></div>
 
                 <h3>Brows...</h3>
               </label>

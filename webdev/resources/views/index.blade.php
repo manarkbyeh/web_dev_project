@@ -35,6 +35,7 @@
               <span class="meta-date-month">Nov</span>
               <span class="meta-date-year">2014</span>
             </div>
+            
             <h2><a href="#">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor </a></h2>
             <small>By <a href="#">Tarjono</a> In <a href="#">Web Design</a> With 3 Comments</small>
           </div>
