@@ -11,9 +11,12 @@
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
+
+Route::resource('/', 'MatchesController');
+Route::post('/match', [
+    'as' => 'match.store',
+    'uses' => 'MatchesController@store'
+    ]);
 
 Route::get('/upload', function () {
     return view('images.upload');
@@ -34,6 +37,6 @@ Route::delete('image/{id}/delete', [
 'as' => 'image.delete',
 'uses' => 'ImageController@delete'
 ]);
-Route::resource('match', 'MatchesController');
+
 //Route::get('image/{id}/delete', ['uses'=>'ImageController@delete','as'=>'image.delete']);
 //Route::post ("image/delete", 'ImageController@destroy');

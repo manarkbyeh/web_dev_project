@@ -15,9 +15,10 @@ class CreateMatchesTable extends Migration
     {
         Schema::create('matches', function (Blueprint $table) {
             $table->increments('id');
+            
             $table->string('title');
             $table->string('body');
-            $table->string('voorwaarden');
+            $table->string('condition');
             $table->integer('win_image_id');
             $table->date('start_at');
             $table->date('end_at');

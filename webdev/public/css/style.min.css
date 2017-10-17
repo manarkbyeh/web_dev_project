@@ -1749,3 +1749,25 @@ a.heart.animated {
 .blue {
     color: #5d9cec !important;
 }
+
+.bootstrap-tagsinput {
+    width: 100% !important;
+}
+
+.blog-title {
+    padding-right: 90px;
+}
+
+.meta-date2 {
+    left: auto !important;
+    right: 0;
+    background: #f55050 !important;
+}
+
+.meta-date2::before {
+    border-bottom: 18px solid #f55050 !important;
+}
+
+.meta-date2::after {
+    border-top: 18px solid #f55050 !important;
+}

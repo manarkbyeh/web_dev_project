@@ -38,21 +38,22 @@ class MatchesController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, array(
-        'title'         => 'required|max:255',
-        'voorwaarden'   => 'required',
+        
+        'title'          => 'required',
         'body'          => 'required',
+        'conditions'          => 'required',
         'start_at'         => 'required',
         'end_at'         => 'required',
         ));
         
         $matches = new Match();
-        
-        
-        $matches->title = $request->title;
+        $matches->title = $request->body;
         $matches->body = $request->body;
+        $matches->condition = $request->conditions;
         $matches->start_at = $request->start_at;
         $matches->end_at = $request->end_at;
-        $matches->voorwaarden = $request->voorwaarden;
+        $matches->win_image_id =1;
+        
         
         if (   $matches->save()) {
             
