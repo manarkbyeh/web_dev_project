@@ -21,4 +21,7 @@ class Image extends Model
     public function m($id){
         return $this->hasMany('App\Like')->where('guest_id', $id);
     }
+    // public function getLikeCountAttribute(){
+    //     return $this->likes->count();
+    // }
 }

@@ -7,6 +7,10 @@ Use  App\Match;
 
 class MatchesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
     * Display a listing of the resource.
     *
@@ -15,9 +19,14 @@ class MatchesController extends Controller
     public function index()
     {
         
-        $match = Match::orderBy('id', 'desc')->first();
-        return view("index",["match"=>$match]);
+      
+        $matches = Match::withTrashed()->get();
+        return view("home.index", ["matches"=>$matches]);
+        
     }
+    
+    
+ 
     
     /**
     * Show the form for creating a new resource.
@@ -47,18 +56,17 @@ class MatchesController extends Controller
         ));
         
         $matches = new Match();
-        $matches->title = $request->body;
+        $matches->title = $request->title;
         $matches->body = $request->body;
         $matches->condition = $request->conditions;
         $matches->start_at = $request->start_at;
         $matches->end_at = $request->end_at;
-        $matches->win_image_id =1;
         
         
         if (   $matches->save()) {
             
             session()->flash('success','Article added successfuly !!');
-            return redirect('/');
+            return redirect('/match');
         }
         
     }
@@ -71,7 +79,7 @@ class MatchesController extends Controller
     */
     public function show($id)
     {
-        //
+        
     }
     
     /**
@@ -82,7 +90,10 @@ class MatchesController extends Controller
     */
     public function edit($id)
     {
-        //
+        $match = Match::find($id);
+        
+        return view('home.edit')->withMatch($match);
+        
     }
     
     /**
@@ -94,7 +105,33 @@ class MatchesController extends Controller
     */
     public function update(Request $request, $id)
     {
-        //
+        
+        
+        
+        $this->validate($request, array(
+        
+        'title'          => 'required',
+        'body'          => 'required',
+        'conditions'          => 'required',
+        'start_at'         => 'required',
+        'end_at'         => 'required',
+        ));
+        // Validate the data
+        $match = Match::find($id);
+        $match->title = $request->input('title');
+        $match->body = $request->input('body');
+        $match->condition = $request->input('condition');
+        $match->start_at = $request->input('start_at');
+        $match->end_at = $request->input('end_at');
+        
+        
+        
+        if (   $match->save()) {
+            
+            session()->flash('success','Article edited successfuly !!');
+            return redirect('/match');
+        }
+        
     }
     
     /**
@@ -103,8 +140,25 @@ class MatchesController extends Controller
     * @param  int  $id
     * @return \Illuminate\Http\Response
     */
+    
     public function destroy($id)
     {
-        //
+        $match = Match::withTrashed()->where('id',$id)->first();
+        if($match != null && $match->deleted_at == null){
+            $match->delete();
+            return  "ok";
+        }else {
+            return "no";
+        }
+    }
+    public function restore($id)
+    {
+        $match = Match::withTrashed()->where('id',$id)->first();
+        if($match != null && $match->deleted_at != null){
+            $match->restore();
+            return  "ok";
+        }else {
+            return "no";
+        }
     }
 }

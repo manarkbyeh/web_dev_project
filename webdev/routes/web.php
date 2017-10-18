@@ -12,15 +12,16 @@
 */
 
 
-Route::resource('/', 'MatchesController');
-Route::post('/match', [
-    'as' => 'match.store',
-    'uses' => 'MatchesController@store'
-    ]);
+//Route::resource('/', 'MatchesController');
+Route::group(['middleware'=>'Lang'],function(){
+Route::resource('match', 'MatchesController');
+});
+Route::resource('match', 'MatchesController');
+Route::resource('/', 'HomeController');
 
 Route::get('/upload', function () {
     return view('images.upload');
-});
+}); 
 
 Route::post('like', 'LikeController@like');
 Route::resource('Guest', 'GastController');
@@ -40,3 +41,5 @@ Route::delete('image/{id}/delete', [
 
 //Route::get('image/{id}/delete', ['uses'=>'ImageController@delete','as'=>'image.delete']);
 //Route::post ("image/delete", 'ImageController@destroy');
+Auth::routes();
+

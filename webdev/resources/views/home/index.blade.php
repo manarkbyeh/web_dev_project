@@ -1,96 +1,53 @@
-@extends('main') @section('content')
-
-<div class="col-md-4 col-md-push-8 col-sm-4 col-sm-push-8 col-xs-12">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="post-container">
-        <div class="post-content">
-          <div class="widget-title">
-            <h3>Logo</h3>
-          </div>
-          <img src="img/partners01.png">
-        </div>
-      </div>
-    </div>
+@extends('main') @section('title', '| All Gast') @section('content')
+<div class="row">
+  <div class="col-md-10">
+    <h1>All Guests</h1>
+  </div>
+  <div class="col-md-12">
+    <hr>
   </div>
 </div>
-
-<div class="col-md-8 col-md-pull-4 col-sm-8 col-sm-pull-4 col-xs-12">
-  <div class="post-container">
-    <div class="post-content">
-      <!-- begin:article -->
-      <div class="row">
-        <div class="col-md-12">
-          <div class="blog-title">
-            @if($match !=null)
-            <div class="meta-date">
-              <span class="meta-date-day">{{date('d', strtotime( $match->start_at))}}</span>
-              <span class="meta-date-month">{{date('m', strtotime( $match->start_at))}}</span>
-              <span class="meta-date-year">{{date('Y', strtotime( $match->start_at))}}</span>
-            </div>
-            @endif
-            <div>
-              <h2>@if($match !=null) {{ $match->title }} @else match not yet @endif</h2>
-              <small>By Manar </small>
-            </div>
-            @if($match !=null)
-            <div class="meta-date   meta-date2">
-              <span class="meta-date-day">{{date('d', strtotime( $match->start_at))}}</span>
-              <span class="meta-date-month">{{date('m', strtotime( $match->start_at))}}</span>
-              <span class="meta-date-year">{{date('Y', strtotime( $match->start_at))}}</span>
-            </div>
-            @endif
-          </div>
-          @if($match !=null)
-
-          <blockquote>{{ $match->body }}</blockquote>
-          @php $arr =explode(",", $match->condition); @endphp @if(count($arr)>0)
-          <h3>Conditions : </h3>
-          <p>Je moet eerste aan de volgende voorwaarden voldaan om deel te nemen aan de wedstrijd</p>
-          <ul>
-            @foreach($arr as $c)
-            <li>{{ $c }}</li>
-            @endforeach
-          </ul>
-          @endif @endif
-          <div class="row">
-            <div class="col-md-12">
-
-              <div class="col-md-4 col-md-offset-2 ">
-
-                <a href="{{url('/image')}}" class="btn btn-lg btn-default">START</a>
-
-              </div>
-              <div class="col-md-4 col-md-offset-2 ">
-                @if($match !=null)
-                <div class="col-md-4 ">
-
-                  <a class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"></span>Edit</a>
-
-                </div>
-                <div class="col-md-4">
-
-                  @if($match->deleted_at !=null)
-                  <a href="javascript:void(0)" data-idmatch="{{$match->id}}" class="btn btn-danger btn-sm btnrestore" data-token="{{ csrf_token() }}">
+<!-- end of .row -->
+<div class="row">
+  <div class="col-md-12">
+    <table class="table">
+      <thead>
+        <th>#</th>
+        <th>Title</th>
+        <th>Inhoud</th>
+        <th>Conditions</th>
+        <th>Start</th>
+        <th>End</th>
+      </thead>
+      <tbody>
+        @foreach ( $matches as $match)
+        <tr>
+  
+          <th>{{ $match->id }}</th>
+          <td> {{ substr(strip_tags($match->title), 0, 50) }}{{ strlen(strip_tags($match->title)) > 50 ? "..." : "" }}</td>
+          <td> {{ substr(strip_tags($match->body), 0, 30) }}{{ strlen(strip_tags($match->body)) > 30 ? "..." : "" }}</td>
+          <td>{{ substr(strip_tags($match->condition), 0, 30) }}{{ strlen(strip_tags($match->condition)) > 30 ? "..." : "" }}</td>
+          <td>{{ date('M j, Y', strtotime($match->start_at)) }}</td>
+          <td>{{ date('M j, Y', strtotime($match->end_at)) }}</td>
+          <td>
+            @if($match->deleted_at !=null)
+            <a href="javascript:void(0)" data-idmatch="{{$match->id}}" class="btn btn-danger btn-sm btnrestore" data-token="{{ csrf_token() }}">
 Restore
 </a> @else
-                  <a href="javascript:void(0)" data-idmatch="{{$match->id}}" class="btn btn-danger btn-sm btndelete" data-token="{{ csrf_token() }}">
+            <a href="javascript:void(0)" data-idmatch="{{$match->id}}" class="btn btn-default btn-sm btndelete" data-token="{{ csrf_token() }}">
     Delete
     </a> @endif
-                </div>
-                @endif
-              </div>
-            </div>
-          </div>
-        </div>
 
-      </div>
-    </div>
+          </td>
+          <td>        <a href="{{ route('match.edit', $match->id) }}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"></span>Edit</a></td>
+        </tr>
+        @endforeach
+      </tbody>
+    </table>
   </div>
 </div>
-</div>
 
-@endsection @section('script')
+@endsection; @section('script')
 <script>
   $(document).ready(function() {
     $("body").on("click", ".btndelete", function() {
