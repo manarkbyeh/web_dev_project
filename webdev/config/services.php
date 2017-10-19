@@ -34,5 +34,11 @@ return [
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
-
+    
+    'facebook' => [
+        'client_id' => '147178709350851',
+        'client_secret' => 'f492690e71de0a08d9ec694652397789',
+        'redirect' =>'http://manar.fr/web_dev_project/webdev/public/Guest/fasebook/callback',
+ 
+    ],
 ];

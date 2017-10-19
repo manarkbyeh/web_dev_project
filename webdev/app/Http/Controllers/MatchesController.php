@@ -120,7 +120,7 @@ class MatchesController extends Controller
         $match = Match::find($id);
         $match->title = $request->input('title');
         $match->body = $request->input('body');
-        $match->condition = $request->input('condition');
+        $match->condition = $request->input('conditions');
         $match->start_at = $request->input('start_at');
         $match->end_at = $request->input('end_at');
         

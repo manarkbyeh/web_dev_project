@@ -32,7 +32,7 @@ Restore
 </a> @else
             <a href="javascript:void(0)" data-idguest="{{$gast->id}}" class="btn btn-default btn-sm btndelete" data-token="{{ csrf_token() }}">
     Delete
-    </a> @endif @endif
+    </a> @endif 
 
           </td>
         </tr>

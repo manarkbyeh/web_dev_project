@@ -10,7 +10,7 @@
           <div class="row">
             <div class="col-xs-12 centered">
               <label id="img" for="file" style="cursor: pointer;margin:40px 35%;" class="text-center">
-                <div id="image_preview"><img id="previewing" class='center' src="img/upload.png" /></div>
+                <div id="image_preview"><img id="previewing" class='center' src="{{asset('/img/upload.png')}}" /></div>
 
                 <h3>Brows...</h3>
               </label>

@@ -19,10 +19,11 @@ class CreateMatchesTable extends Migration
             $table->string('title');
             $table->string('body');
             $table->string('condition');
-            $table->integer('win_image_id');
+            $table->integer('win_image_id')->default('0');
             $table->date('start_at');
             $table->date('end_at');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

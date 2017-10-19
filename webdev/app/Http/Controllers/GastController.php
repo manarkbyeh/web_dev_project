@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use App\Gast;
 use Session;
 use Carbon\Carbon;
-
+use Socialite;
 use Cookie;
 
 class GastController extends Controller
@@ -81,39 +82,6 @@ class GastController extends Controller
         redirect::back()->with('errors', 'Something went wrong , try again');
     }
     
-    /**
-    * Display the specified resource.
-    *
-    * @param  int  $id
-    * @return \Illuminate\Http\Response
-    */
-    public function show($id)
-    {
-        //
-    }
-    
-    /**
-    * Show the form for editing the specified resource.
-    *
-    * @param  int  $id
-    * @return \Illuminate\Http\Response
-    */
-    public function edit($id)
-    {
-        //
-    }
-    
-    /**
-    * Update the specified resource in storage.
-    *
-    * @param  \Illuminate\Http\Request  $request
-    * @param  int  $id
-    * @return \Illuminate\Http\Response
-    */
-    public function update(Request $request, $id)
-    {
-        //
-    }
     
     /**
     * Remove the specified resource from storage.
@@ -141,5 +109,61 @@ class GastController extends Controller
         }else {
             return "no";
         }
+    }
+    /**
+    * Redirect the user to the facebook authentication page.
+    *
+    * @return Response
+    */
+    public function redirectToProvider()
+    {
+        return Socialite::driver('facebook')->redirect();
+    }
+    
+    /**
+    * Obtain the user information from GitHub.
+    *
+    * @return Response
+    */
+    public function handleProviderCallback()
+    {
+        $user = Socialite::driver('facebook')->user();
+        $verbraucher = [
+            'name'     => $user->name,
+            'email'    => $user->email,
+           
+          ];
+  
+          $rules=[
+            'name' => 'bail|required|string',
+            'email' => 'bail|required|email',
+           
+          ];
+  
+          $validator = Validator::make($verbraucher, $rules);
+  
+          if ($validator->fails()) {
+              return redirect('image')->withErrors($validator);
+          }
+      
+          $ip =  \Request::ip();
+          $mytime = Carbon::now();
+          $cok= md5($mytime->toDateTimeString());
+
+            
+          // store in the database
+          $gast= new Gast;
+          
+          $gast->name =  $user->name;
+          $gast->email =  $user->email;
+          $gast->ip = $ip;
+          $gast->cookies = $cok;
+
+          if ($gast->save()) {
+              setcookie('xvz', $cok, time() +  3600*24*30*12, '/');
+              return redirect('/image');
+
+          }
+          redirect::back()->with('errors', 'Something went wrong , try again');
     }
 }

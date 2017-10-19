@@ -8,7 +8,7 @@
           <div class="widget-title">
             <h3>Logo</h3>
           </div>
-          <img src="img/partners01.png">
+          <img src="images/logo.png">
         </div>
       </div>
     </div>
@@ -64,8 +64,8 @@
               <div class="col-md-4 col-md-offset-2 ">
                 @if($match !=null)
                 <div class="col-md-4 ">
-
-                  <a class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"></span>Edit</a>
+                <a href="{{ route('match.edit', $match->id) }}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"></span>Edit</a></td>
+                
 
                 </div>
                 <div class="col-md-4">

@@ -19,27 +19,34 @@ Route::resource('match', 'MatchesController');
 Route::resource('match', 'MatchesController');
 Route::resource('/', 'HomeController');
 
-Route::get('/upload', function () {
-    return view('images.upload');
-}); 
-
 Route::post('like', 'LikeController@like');
-Route::resource('Guest', 'GastController');
-/*Route::delete('/Guest/{id}/delete', [
-'as' => 'Guest.delete',
-'uses' => 'GastController@delete'
-]);*/
+
+
+Route::get('Guest/facebook', ['uses'=>'GastController@redirectToProvider','as'=>'Guest.facebook']);
+Route::get('Guest/fasebook/callback', 'GastController@handleProviderCallback');
+
+Route::get('Guest/', 'GastController@index');
+Route::get('Guest/create', 'GastController@create');
+
+Route::post('/Guest', 'GastController@store')->name('Guest.store');
+
 Route::delete('/Guest/{id}/restore', [
-'as' => 'Guest.restore',
-'uses' => 'GastController@restore'
+    'as' => 'Guest.restore',
+    'uses' => 'GastController@restore'
+    ]);
+
+Route::delete('/match/{id}/restore', [
+'as' => 'match.restore',
+'uses' => 'MatchesController@restore'
 ]);
-Route::resource('/image', 'ImageController');
+Route::resource('/image', 'ImageController')->only(['index','store','delete']);
 Route::delete('image/{id}/delete', [
 'as' => 'image.delete',
 'uses' => 'ImageController@delete'
 ]);
-
+Route::get('/image/upload','ImageController@upload' ); 
 //Route::get('image/{id}/delete', ['uses'=>'ImageController@delete','as'=>'image.delete']);
 //Route::post ("image/delete", 'ImageController@destroy');
 Auth::routes();
+
 

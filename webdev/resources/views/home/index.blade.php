@@ -1,7 +1,7 @@
 @extends('main') @section('title', '| All Gast') @section('content')
 <div class="row">
   <div class="col-md-10">
-    <h1>All Guests</h1>
+    <h1>All Matches</h1>
   </div>
   <div class="col-md-12">
     <hr>

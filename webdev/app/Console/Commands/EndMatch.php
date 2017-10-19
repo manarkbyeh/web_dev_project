@@ -8,8 +8,9 @@ use App\Image;
 use DB;
 use App\Winner;
 use App\Gast;
+use Mail;
 
-class EndMatch extends Command
+class EndMatch extends Command 
 {
     /**
      * The name and signature of the console command.
@@ -58,12 +59,12 @@ class EndMatch extends Command
         ];
 
         $winners = Winner::create($data);
-        $Gast = Gast::find($imgs->guets_id);
+        $Gast = Gast::find($imgs->guest_id)->toArray();
         try{
-            Mail::send('email.email',   $data,function($message)use ( $data){
-                $message->from($data['email']);
-                $message->to('myprojectantwerpen@gmail.com');
-                $message->subject($data['subject']);
+            Mail::send('email.email',  ['Gast' => $Gast],function($message) use ( $Gast){
+                $message->from('dailymunch1@gmail.com');
+                $message->to('dailymunch1@gmail.com');
+                $message->subject('hello');
             });
         }catch(\Exception $e){
             throw $e;

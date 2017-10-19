@@ -14,7 +14,7 @@ use Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use Carbon\Carbon;
-
+use Auth;
 class ImageController extends Controller
 {
     /**
@@ -24,33 +24,22 @@ class ImageController extends Controller
     */
     public function index()
     {
-        // $im = Image::find(8)->m(8)->first();
-        // dd($im);
-        
-        $images =Image::with('likes')->get();
-        return view("gallery", compact("images"))->with('idgust',$this->checkGeust(\Request::ip()));
+            $images =Image::with('likes')->get();
+            return view("gallery", compact("images"))->with('idgust',$this->checkGeust(\Request::ip()));
     }
     
-    /**
-    * Show the form for creating a new resource.
-    *
-    * @return \Illuminate\Http\Response
-    */
-    public function create()
-    {
-        //
+ 
+    public function upload(){
+        if( $this->checkGeust(\Request::ip())){
+            return view("images.upload");
+        }
+        return redirect('/Guest/create');
     }
-    
-    /**
-    * Store a newly created resource in storage.
-    *
-    * @param  \Illuminate\Http\Request  $request
-    * @return \Illuminate\Http\Response
-    */
+  
     public function store(Request $request)
     {
         
-        $idGeust = $this->checkGeust(\Request::ip());
+        $idGeust = $this->checkGeust($request->ip());
         if ($idGeust == false) {
             return redirect('/Guest/create');
         }
@@ -63,46 +52,7 @@ class ImageController extends Controller
         return redirect('/image')->with('Success', 'successfully saved');
     }
     
-    /**
-    * Display the specified resource.
-    *
-    * @param  int  $id
-    * @return \Illuminate\Http\Response
-    */
-    public function show($id)
-    {
-        //
-    }
-    
-    /**
-    * Show the form for editing the specified resource.
-    *
-    * @param  int  $id
-    * @return \Illuminate\Http\Response
-    */
-    public function edit($id)
-    {
-        //
-    }
-    
-    /**
-    * Update the specified resource in storage.
-    *
-    * @param  \Illuminate\Http\Request  $request
-    * @param  int  $id
-    * @return \Illuminate\Http\Response
-    */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-    
-    /**
-    * Remove the specified resource from storage.
-    *
-    * @param  int  $id
-    * @return \Illuminate\Http\Response
-    */
+ 
     
     
     public function delete($id)
@@ -123,16 +73,25 @@ class ImageController extends Controller
     }
     
     
-    private function checkGeust($ip)
-    {
-        $gast =  Gast::where('ip', $ip)->first();
-        if ($gast == null) {
-            
-            return false;
-        }
-        else
+    private function checkGeust($ip){
+        $ck =isset($_COOKIE['xvz'])?$_COOKIE['xvz']:'';
+        $gast =  Gast::where('ip',$ip)
+        ->orwhere('cookies',$ck)->first();
+        if($gast !=null){
+            if($gast->ip != $ip){
+                $gast->ip = $ip;
+                $gast->save();
+            }else if($gast->cookies != $ck){
+                $mytime = Carbon::now();
+                $ck= md5($mytime->toDateTimeString().$ip);
+                $gast->cookies = $ck;
+                if($gast->save() ){
+                    setcookie('xvz', $ck, time() +  3600*24*30*12, '/');
+                }
+            }
             return $gast->id;
+        }
+        return false;
     }
-    
     
 }

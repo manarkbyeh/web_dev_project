@@ -7,7 +7,7 @@
         <div class="post-container">
           <div class="sidebar-menu">
             <ul class="nav nav-pills nav-stacked">
-              <li class="active"><a href="{{url('/upload')}}"><i class="fa fa-clock-o"></i> Add Picture</a></li>
+              <li class="active"><a href="{{url('/image/upload')}}"><i class="fa fa-clock-o"></i> Add Picture</a></li>
               <li><a href="#"><i class="fa fa-clock-o"></i> Newest</a></li>
               <li><a href="#"><i class="fa fa-star-o"></i> Popular</a></li>
               <li><a href="#"><i class="fa fa-certificate"></i> Last Image</a></li>
@@ -38,11 +38,6 @@
                     <label> {{$image->likes->count()}} </label>
                   </a>
                 </li>
-
-
-
-
-
 
                 @if($image->guest_id==$idgust)
                 <li class="pull-right">
