@@ -64,7 +64,7 @@ class EndMatch extends Command
             Mail::send('email.email',  ['Gast' => $Gast],function($message) use ( $Gast){
                 $message->from('dailymunch1@gmail.com');
                 $message->to('dailymunch1@gmail.com');
-                $message->subject('hello');
+           
             });
         }catch(\Exception $e){
             throw $e;

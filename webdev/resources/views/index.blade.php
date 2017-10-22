@@ -8,7 +8,22 @@
           <div class="widget-title">
             <h3>Logo</h3>
           </div>
-          <img src="images/logo.png">
+          <img src="images/logo.jpeg" class="logo">
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="post-container">
+        <div class="post-content">
+          <div class="widget-title">
+            <h3>Winners</h3>
+          </div>
+          <u>
+             <li>lsdflkfsdkldfdkls</li>
+             <li>lsdflkfsdkldfdkls</li>
+             <li>lsdflkfsdkldfdkls</li>
+             <li>lsdflkfsdkldfdkls</li>
+           </u>
         </div>
       </div>
     </div>
@@ -42,7 +57,7 @@
             @endif
           </div>
           @if($match !=null)
-
+<img src="{{asset('images/background.jpg')}}" alt="" class="img-responsive">
           <blockquote>{{ $match->body }}</blockquote>
           @php $arr =explode(",", $match->condition); @endphp @if(count($arr)>0)
           <h3>Conditions : </h3>
@@ -56,30 +71,12 @@
           <div class="row">
             <div class="col-md-12">
 
-              <div class="col-md-4 col-md-offset-2 ">
+              <div class="col-md-4 col-md-offset-4 ">
 
                 <a href="{{url('/image')}}" class="btn btn-lg btn-default">START</a>
 
               </div>
-              <div class="col-md-4 col-md-offset-2 ">
-                @if($match !=null)
-                <div class="col-md-4 ">
-                <a href="{{ route('match.edit', $match->id) }}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"></span>Edit</a></td>
-                
-
-                </div>
-                <div class="col-md-4">
-
-                  @if($match->deleted_at !=null)
-                  <a href="javascript:void(0)" data-idmatch="{{$match->id}}" class="btn btn-danger btn-sm btnrestore" data-token="{{ csrf_token() }}">
-Restore
-</a> @else
-                  <a href="javascript:void(0)" data-idmatch="{{$match->id}}" class="btn btn-danger btn-sm btndelete" data-token="{{ csrf_token() }}">
-    Delete
-    </a> @endif
-                </div>
-                @endif
-              </div>
+          
             </div>
           </div>
         </div>

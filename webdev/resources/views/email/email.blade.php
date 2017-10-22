@@ -1,4 +1,7 @@
-<h1>U heeft een nieuwe email</h1>
-<h3>{{$subject}}</h3>
-<div>{{$bodymessage}}</div>
-<div>Van:{{$email}}</div>
+Beste {{ $Gast['name'] }}
+
+{{ $Gast['name'] }} is gewonnen aan de wedstrijd.  
+
+Groeten 
+
+Team DailyMunch

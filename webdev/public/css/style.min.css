@@ -380,10 +380,14 @@ h6 {
     padding: 15px
 }
 
+.post-content .logo {
+    max-height: 300px;
+}
+
 .post-content img {
     display: block;
     margin-left: auto;
-    margin-right: auto
+    margin-right: auto;
 }
 
 .sidebar-menu {
@@ -1366,7 +1370,7 @@ h6 {
 }
 
 .blog-title .meta-date {
-    background: #428bca;
+    background-color: #D10074;
     width: 75px;
     height: 45px;
     display: inline-block;
@@ -1386,7 +1390,7 @@ h6 {
     border: 40px;
     border-top: 0 solid transparent;
     border-right: 38px solid transparent;
-    border-bottom: 18px solid #428bca;
+    border-bottom: 18px solid #D10074;
     border-left: 38px solid transparent
 }
 
@@ -1396,7 +1400,7 @@ h6 {
     right: 0;
     bottom: -18px;
     border: 40px;
-    border-top: 18px solid #428bca;
+    border-top: 18px solid #D10074;
     border-right: 38px solid transparent;
     border-bottom: 0 solid transparent;
     border-left: 38px solid transparent
@@ -1761,13 +1765,21 @@ a.heart.animated {
 .meta-date2 {
     left: auto !important;
     right: 0;
-    background: #f55050 !important;
+    background: #000 !important;
 }
 
 .meta-date2::before {
-    border-bottom: 18px solid #f55050 !important;
+    border-bottom: 18px solid #000 !important;
 }
 
 .meta-date2::after {
-    border-top: 18px solid #f55050 !important;
+    border-top: 18px solid #000 !important;
+}
+
+.btn-default {
+    background-color: #D10074;
+    ;
+    border-color: #D10074;
+    color: #FFFFFF;
+    min-width: 120px;
 }

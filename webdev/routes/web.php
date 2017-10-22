@@ -12,10 +12,7 @@
 */
 
 
-//Route::resource('/', 'MatchesController');
-Route::group(['middleware'=>'Lang'],function(){
-Route::resource('match', 'MatchesController');
-});
+
 Route::resource('match', 'MatchesController');
 Route::resource('/', 'HomeController');
 

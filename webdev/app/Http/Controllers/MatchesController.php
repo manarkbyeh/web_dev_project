@@ -66,7 +66,7 @@ class MatchesController extends Controller
         if (   $matches->save()) {
             
             session()->flash('success','Article added successfuly !!');
-            return redirect('/match');
+            return redirect()->to('/match');
         }
         
     }
@@ -129,7 +129,7 @@ class MatchesController extends Controller
         if (   $match->save()) {
             
             session()->flash('success','Article edited successfuly !!');
-            return redirect('/match');
+            return redirect()->to('/match');
         }
         
     }

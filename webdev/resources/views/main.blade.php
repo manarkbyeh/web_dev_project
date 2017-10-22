@@ -26,7 +26,6 @@
 
 <body>
   <div id="content">
-    @include('partials._header')
     <div class="container">
       <div class="row ">
         @include('partials._messages') @yield('content')
