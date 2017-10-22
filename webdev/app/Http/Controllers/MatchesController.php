@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-Use  App\Match;
+use App\Match;
+use Illuminate\Support\Facades\Auth;
 
 class MatchesController extends Controller
 {
@@ -46,28 +47,31 @@ class MatchesController extends Controller
     */
     public function store(Request $request)
     {
+   
         $this->validate($request, array(
-        
-        'title'          => 'required',
-        'body'          => 'required',
-        'conditions'          => 'required',
-        'start_at'         => 'required',
-        'end_at'         => 'required',
-        ));
-        
-        $matches = new Match();
-        $matches->title = $request->title;
-        $matches->body = $request->body;
-        $matches->condition = $request->conditions;
-        $matches->start_at = $request->start_at;
-        $matches->end_at = $request->end_at;
-        
-        
-        if (   $matches->save()) {
             
-            session()->flash('success','Article added successfuly !!');
-            return redirect()->to('/match');
-        }
+            'title'          => 'required',
+            'body'           => 'required',
+            'start_at'       => 'required|date|after_or_equal:'.\Carbon\Carbon::today(),
+            'end_at'         => 'required|date|after_or_equal:start_at',
+            ));
+            $res =  Match::whereBetween('start_at', [$request->start_at, $request->end_at])
+            ->orWhereBetween('end_at', [$request->start_at, $request->end_at])
+            ->count();
+            if ($res >0) {
+                    return back()->withInput()->withErrors(['hedha etari5 ma7jouzon mosba9an']);
+            }
+            $matche = new Match();
+            $matche->title = $request->title;
+            $matche->body = $request->body;
+            $matche->condition = $request->conditions;
+            $matche->start_at = $request->start_at;
+            $matche->end_at = $request->end_at;
+            $matche->user_id = Auth::user()->id;
+            if ($matche->save()) {
+                session()->flash('success', 'Match added successfuly !!');
+                return redirect('/match');
+            }
         
     }
     
@@ -105,34 +109,34 @@ class MatchesController extends Controller
     */
     public function update(Request $request, $id)
     {
-        
-        
-        
         $this->validate($request, array(
-        
-        'title'          => 'required',
-        'body'          => 'required',
-        'conditions'          => 'required',
-        'start_at'         => 'required',
-        'end_at'         => 'required',
-        ));
-        // Validate the data
+            'title'          => 'required',
+            'body'           => 'required',
+            'start_at'       => 'required|date',
+            'end_at'         => 'required|date|after_or_equal:start_at|after_or_equal:'.\Carbon\Carbon::today(),
+            ));
+            $res =  Match::where('id','!=',$id)
+            ->Where(function($query) use ($request){
+                $query->whereBetween('start_at', [$request->start_at, $request->end_at])
+                ->orWhereBetween('end_at', [$request->start_at, $request->end_at]);
+            })
+            ->count();
+        if ($res >0) {
+            return back()->withInput()->withErrors(['hedha etari5 ma7jouzon mosba9an']);
+        }
         $match = Match::find($id);
         $match->title = $request->input('title');
         $match->body = $request->input('body');
         $match->condition = $request->input('conditions');
         $match->start_at = $request->input('start_at');
         $match->end_at = $request->input('end_at');
-        
-        
-        
-        if (   $match->save()) {
-            
-            session()->flash('success','Article edited successfuly !!');
-            return redirect()->to('/match');
+        $match->user_id = Auth::user()->id;
+        if ($match->save()) {
+            session()->flash('success', 'Match edited successfuly !!');
+            return redirect('/match');
         }
-        
     }
+    
     
     /**
     * Remove the specified resource from storage.
@@ -143,22 +147,11 @@ class MatchesController extends Controller
     
     public function destroy($id)
     {
-        $match = Match::withTrashed()->where('id',$id)->first();
-        if($match != null && $match->deleted_at == null){
+        $match = Match::withTrashed()->where('id', $id)->first();
+        if ($match != null && $match->deleted_at == null) {
             $match->delete();
             return  "ok";
-        }else {
+        } else {
             return "no";
-        }
-    }
-    public function restore($id)
-    {
-        $match = Match::withTrashed()->where('id',$id)->first();
-        if($match != null && $match->deleted_at != null){
-            $match->restore();
-            return  "ok";
-        }else {
-            return "no";
-        }
-    }
+        }}
 }

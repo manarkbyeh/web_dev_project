@@ -3,49 +3,33 @@
 <div id="content">
   <div class="container">
     <div class="row">
-      <div class="col-md-3">
-        <div class="post-container">
-          <div class="sidebar-menu">
-            <ul class="nav nav-pills nav-stacked">
-              <li class="active"><a href="{{url('/image/upload')}}"><i class="fa fa-clock-o"></i> Add Picture</a></li>
-              <li><a href="#"><i class="fa fa-clock-o"></i> Newest</a></li>
-              <li><a href="#"><i class="fa fa-star-o"></i> Popular</a></li>
-              <li><a href="#"><i class="fa fa-certificate"></i> Last Image</a></li>
-
-            </ul>
-          </div>
-        </div>
-      </div>
-
+      @include('partials._saide')
       {{csrf_field()}}
       <!-- break -->
       <div clas="col-md-9">
         @foreach ($images as $image)
         <div class="col-md-3 col-sm-6 col-xs-12 ">
           <div class="post-container">
-
             <div class="post-image">
-
-              <a href="{{asset('/storage/'.$image->path)}}" class="img-group-gallery" title="Lorem ipsum dolor sit amet">
+              <a href="{{asset('/storage/'.$image->path)}}" class="img-group-gallery" title="{{$image->gast->name}}">
+              <div class="img" style="background-image:url({{asset('/storage/'.$image->path)}});"></div>                
               </a>
-              <div class="img" style="background-image:url({{asset('/storage/'.$image->path)}});"></div>
             </div>
             <div class="post-meta">
               <ul class="list-meta list-inline">
                 <li>
                   <a href="javascript:void(0)" class="heart animated" data-idimg="{{$image->id}}">
-                    <i @if($image->m($idgust)->first()) class="fa fa-heart blue"  @else class="fa fa-heart" @endif ></i>
-                    <label> {{$image->likes->count()}} </label>
+                    <i @if($image->m($idgust)->first()) class="fa fa-heart fa-lg blue"  @else class="fa fa-heart fa-lg" @endif ></i>
+                    <label>@if($image->likes_count) {{$image->likes_count}} @else 0  @endif </label>
                   </a>
                 </li>
-
-                @if($image->guest_id==$idgust)
+                @if($image->gast_id==$idgust)
                 <li class="pull-right">
                   <a href="javascript:void(0)" data-idimg="{{$image->id}}" class="btndelete" data-token="{{ csrf_token() }}">
-                    <i class="fa fa-remove fa-lg" aria-hidden="true">    </i>
+                    <i class="fa fa-remove fa-lg"></i>
                   </a>
-
                 </li>
+          
                 @endif
 
               </ul>
@@ -72,11 +56,11 @@
       }
     });
 
-    $('.heart').on('click', function() {
+    $("body").on('click','.heart', function() {
       var btn = $(this);
 
       $.ajax({
-        url: "like",
+        url: "{{url('/like')}}",
         type: "POST",
         data: {
           image_id: btn.attr('data-idimg')
@@ -162,6 +146,9 @@
       });
 
     });
+
+
+
 
 
   });

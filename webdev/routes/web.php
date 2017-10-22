@@ -16,6 +16,7 @@
 Route::resource('match', 'MatchesController');
 Route::resource('/', 'HomeController');
 
+
 Route::post('like', 'LikeController@like');
 
 
@@ -37,13 +38,8 @@ Route::delete('/match/{id}/restore', [
 'uses' => 'MatchesController@restore'
 ]);
 Route::resource('/image', 'ImageController')->only(['index','store','delete']);
-Route::delete('image/{id}/delete', [
-'as' => 'image.delete',
-'uses' => 'ImageController@delete'
-]);
-Route::get('/image/upload','ImageController@upload' ); 
-//Route::get('image/{id}/delete', ['uses'=>'ImageController@delete','as'=>'image.delete']);
-//Route::post ("image/delete", 'ImageController@destroy');
+Route::delete('image/{id}/delete', ['as' => 'image.delete','uses' => 'ImageController@delete']);
+Route::get('/image/upload', 'ImageController@upload' );
 Auth::routes();
 
 

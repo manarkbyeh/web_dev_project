@@ -18,10 +18,10 @@ class LikeController extends Controller
             if($geust_id == false){
                 return  'redirect';
             }
-            $like = Like::where('guest_id',$geust_id)->where('image_id',$request->image_id)->first();
+            $like = Like::where('gast_id',$geust_id)->where('image_id',$request->image_id)->first();
             if($like == null){
                 $like = new \App\Like();
-                $like->guest_id = $geust_id;
+                $like->gast_id = $geust_id;
                 $like->image_id =$request->image_id ;
                 $like->save();
                 return 'add';
@@ -32,6 +32,7 @@ class LikeController extends Controller
         }
         return view('index');
     }
+
     private function checkGeust($request){
         $ck =isset($_COOKIE['xvz'])?$_COOKIE['xvz']:'';
         $ip = $request->ip();

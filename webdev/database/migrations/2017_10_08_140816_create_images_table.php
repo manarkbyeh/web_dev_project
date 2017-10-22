@@ -16,14 +16,11 @@ class CreateImagesTable extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->increments('id');
             $table->string('path')->default('default.jpg');
-            $table->boolean('win')->default(0);
-            $table->integer('guest_id')->unsigned();
+            $table->integer('gast_id')->unsigned();
+            $table->integer('match_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('guest_id')
-            ->references('id')
-            ->on('gasts')
-            ->onDelete('cascade');
+            $table->foreign('gast_id')->references('id')->on('gasts')->onDelete('cascade');
         });
     }
     

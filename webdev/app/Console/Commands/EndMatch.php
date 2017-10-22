@@ -55,16 +55,16 @@ class EndMatch extends Command
      
         $data = [
           'image_id' => $imgs->id, 'likes_count' => $like_count,
-          'guest_id' => $imgs->guest_id
+          'gast_id' => $imgs->gast_id
         ];
 
         $winners = Winner::create($data);
-        $Gast = Gast::find($imgs->guest_id)->toArray();
+        $Gast = Gast::find($imgs->gast_id)->toArray();
         try{
             Mail::send('email.email',  ['Gast' => $Gast],function($message) use ( $Gast){
                 $message->from('dailymunch1@gmail.com');
                 $message->to('dailymunch1@gmail.com');
-           
+                $message->subject('hello');
             });
         }catch(\Exception $e){
             throw $e;

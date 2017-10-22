@@ -29,29 +29,36 @@ class ImageController extends Controller
     }
     
  
-    public function upload(){
-        if( $this->checkGeust(\Request::ip())){
-            return view("images.upload");
+    public function upload()
+    {
+    
+        if ($this->checkGeust(\Request::ip())) {
+            $active= 'upload';
+            return view("images.upload", compact('active'));
         }
         return redirect('/Guest/create');
     }
   
     public function store(Request $request)
     {
-        
+    
+        $this->validate($request, [
+            'image' => 'required|image|mimes:jpeg,bmp,jpg,png|max:5000'
+        ]);
         $idGeust = $this->checkGeust($request->ip());
         if ($idGeust == false) {
             return redirect('/Guest/create');
         }
         $image = new Image();
+        // dd($request);
         if ($request->hasFile('image')) :
             $image->path = $request->image->store('images');
+            $image->gast_id = $idGeust;
+            $image->save();
+            return redirect('/image')->with('Success', 'successfully saved');
         endif;
-        $image->guest_id = $idGeust;
-        $image->save();
-        return redirect('/image')->with('Success', 'successfully saved');
+        return Back()->with('Errors', 'Error');
     }
-    
  
     
     
