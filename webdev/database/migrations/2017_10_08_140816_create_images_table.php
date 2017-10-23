@@ -17,7 +17,7 @@ class CreateImagesTable extends Migration
             $table->increments('id');
             $table->string('path')->default('default.jpg');
             $table->integer('gast_id')->unsigned();
-            $table->integer('match_id')->unsigned();
+        
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('gast_id')->references('id')->on('gasts')->onDelete('cascade');
