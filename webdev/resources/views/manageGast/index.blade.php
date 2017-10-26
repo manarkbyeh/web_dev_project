@@ -61,7 +61,7 @@ Restore
       }).then(function() {
         $.ajax({
           type: "post",
-          url: "Guest/" + val.attr("data-idguest"),
+          url: "{{url('/Guest')}}/" + val.attr("data-idguest")+"/delete",
           data: {
             _method: 'delete',
             _token: token
@@ -104,7 +104,7 @@ Restore
       }).then(function() {
         $.ajax({
           type: "post",
-          url: "Guest/" + val.attr("data-idguest") + "/restore",
+          url: "{{url('/Guest')}}/" + val.attr("data-idguest")+"/restore",
           data: {
             _method: 'delete',
             _token: token

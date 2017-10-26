@@ -21,26 +21,25 @@
       </thead>
       <tbody>
         @foreach ( $matches as $match)
-        <tr  @if($match->deleted_at !=null) class="deleted" @elseif($match->win_image_id) class="old" @endif>
+        <tr>
+  
           <th>{{ $match->id }}</th>
           <td> {{ substr(strip_tags($match->title), 0, 50) }}{{ strlen(strip_tags($match->title)) > 50 ? "..." : "" }}</td>
           <td> {{ substr(strip_tags($match->body), 0, 30) }}{{ strlen(strip_tags($match->body)) > 30 ? "..." : "" }}</td>
           <td>{{ substr(strip_tags($match->condition), 0, 30) }}{{ strlen(strip_tags($match->condition)) > 30 ? "..." : "" }}</td>
           <td>{{ date('M j, Y', strtotime($match->start_at)) }}</td>
           <td>{{ date('M j, Y', strtotime($match->end_at)) }}</td>
-            @if($match->deleted_at ==null)
           <td>
+            @if($match->deleted_at !=null)
+            <a href="javascript:void(0)" data-idmatch="{{$match->id}}" class="btn btn-danger btn-sm btnrestore" data-token="{{ csrf_token() }}">
+Restore
+</a> @else
             <a href="javascript:void(0)" data-idmatch="{{$match->id}}" class="btn btn-default btn-sm btndelete" data-token="{{ csrf_token() }}">
-               Delete
-            </a> 
+    Delete
+    </a> @endif
+
           </td>
-          <td>       
-            <a href="{{ route('match.edit', $match->id) }}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"></span>Edit</a>
-          </td>
-          @else
-          <td></td>
-          <td></td>
-          @endif
+          <td>        <a href="{{ route('match.edit', $match->id) }}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"></span>Edit</a></td>
         </tr>
         @endforeach
       </tbody>
@@ -61,7 +60,7 @@
         showCancelButton: true,
         confirmButtonText: "Yes, delete it!",
         cancelButtonText: "No, cancel!",
-        confirmButtonClass: "btn btn-success  m-l-10",
+        confirmButtonClass: "btn btn-success",
         cancelButtonClass: "btn btn-danger ",
         buttonsStyling: false
       }).then(function() {
@@ -80,13 +79,11 @@
               type: "warning",
               cancelButton: true,
               cancelButtonText: "ok",
-              cancelButtonClass: "btn btn-danger",
+              cancelButtonClass: "btn btn-danger m-l-10",
             });
           } else if (data == "ok") {
             swal("Good job!", "You clicked the button!", "success").then(function() {
-                val.parent( "td" ).parent( "tr" ).removeClass('old').addClass('deleted');
-              val.parent( "td" ).next( "td").text('');
-              val.parent( "td" ).text('');
+              val.removeClass('btndelete').removeClass('btn-default').addClass('btnrestore').addClass('btn-danger').text('Restore');
             });
           };
           return false;
@@ -94,6 +91,48 @@
 
       });
 
+    });
+    $("body").on("click", ".btnrestore", function() {
+      var val = $(this);
+      var token = $(this).data('token');
+
+      swal({
+        title: "Are you sure?",
+        text: "You won't be able to restore this!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, restore it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-success",
+        cancelButtonClass: "btn btn-danger ",
+        buttonsStyling: false
+      }).then(function() {
+        $.ajax({
+          type: "post",
+          url: "match/" + val.attr("data-idmatch") + "/restore",
+          data: {
+            _method: 'delete',
+            _token: token
+          },
+        }).done(function(data) {
+          if (data == "no") {
+            swal({
+              title: "ERRUE",
+              text: "you can't restore this guest, try again !!!",
+              type: "warning",
+              cancelButton: true,
+              cancelButtonText: "ok",
+              cancelButtonClass: "btn btn-danger m-l-10",
+            });
+          } else if (data == "ok") {
+            swal("Good job!", "You clicked the button!", "success").then(function() {
+              val.removeClass('btnrestore').removeClass('btn-danger').addClass('btndelete').addClass('btn-default').text('Delete');
+            });
+          }
+          return false;
+        });
+
+      });
     });
 
     $.fn.extend({

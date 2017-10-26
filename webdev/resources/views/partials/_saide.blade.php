@@ -2,12 +2,12 @@
   <div class="row">
     <div class="post-container">
       <div class="sidebar-menu">
-        <ul class="nav nav-pills nav-stacked">
-          <li class="{{ Request::is('/') ? 'active' : '' }}"><a href="{{url('/')}}"><i class="fa fa-home"></i> Home</a></li>
-          <li class="{{ Request::is('image') ? 'active' : '' }}"><a href="{{url('/image')}}"><i class="fa fa-star-o"></i> Gallery</a></li>
-          <li class="{{ Request::is('image/upload') ? 'active' : '' }}"><a href="{{url('/image/upload')}}"><i class="fa fa-star-o"></i>  Add Picture</a></li>
-          <li class="{{ Request::is('image/best') ? 'active' : '' }}"><a href="{{url('/image/best')}}"><i class="fa fa-certificate"></i> Top Photos</a></li>
-        </ul>
+      <ul class="nav nav-pills nav-stacked">
+      <li @if($active && $active == 'upload') class='active' @endif  ><a href="{{url('/image/upload')}}"><i class="fa fa-clock-o"></i> Add Picture</a></li>
+      <li @if($active && $active == 'index') class='active' @endif  ><a href="{{url('/image')}}"><i class="fa fa-clock-o"></i> Newest</a></li>
+      <li @if($active && $active == 'popular') class='active' @endif  ><a href="{{url('/image/popular')}}"><i class="fa fa-star-o"></i> Popular</a></li>
+      <li @if($active && $active == 'last_image') class='active' @endif  ><a href="{{url('/image/last_image')}}"><i class="fa fa-certificate"></i> Last Image</a></li>
+    </ul>
       </div>
     </div>
     <div class="post-container">

@@ -15,23 +15,21 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use Carbon\Carbon;
 use Auth;
+
 class ImageController extends Controller
 {
-    /**
-    * Display a listing of the resource.
-    *
-    * @return \Illuminate\Http\Response
-    */
+  
     public function index()
     {
-            $images =Image::with('likes')->get();
-            return view("gallery", compact("images"))->with('idgust',$this->checkGeust(\Request::ip()));
+            $images =Image::withCount('likes')->get();
+            // dd($images);
+            $active= 'index';
+            return view("gallery", compact("images", "active"))->with('idgust', $this->checkGeust(\Request::ip()));
     }
     
  
     public function upload()
     {
-    
         if ($this->checkGeust(\Request::ip())) {
             $active= 'upload';
             return view("images.upload", compact('active'));
@@ -41,7 +39,6 @@ class ImageController extends Controller
   
     public function store(Request $request)
     {
-    
         $this->validate($request, [
             'image' => 'required|image|mimes:jpeg,bmp,jpg,png|max:5000'
         ]);
@@ -59,40 +56,49 @@ class ImageController extends Controller
         endif;
         return Back()->with('Errors', 'Error');
     }
- 
-    
     
     public function delete($id)
     {
         $idGuest = $this->checkGeust(\Request::ip());
         if ($idGuest == false) {
             return 'global';
-        }
-        else {
-            
+        } else {
             $image = Image::find($id);
-            if($image->guest_id != $idGuest)
-            return 'no';
-            
-            $image->delete();
+            if ($image->gast_id != $idGuest) {
+                return 'no';
+            }
+            $image->forceDelete();
             return 'ok';
         }
     }
     
+    public function popular()
+    {
+        $images =Image::withCount('likes')->orderBy('likes_count', 'desc')->get();
+        $active= 'popular';
+        return view("gallery", compact("images", "active"))->with('idgust', $this->checkGeust(\Request::ip()));
+    }
+    public function last_image()
+    {
+        $images =Image::withCount('likes')->orderBy('created_at', 'desc')->get();
+        $active= 'last_image';
+        return view("gallery", compact("images", "active"))->with('idgust', $this->checkGeust(\Request::ip()));
+    }
     
-    private function checkGeust($ip){
+    private function checkGeust($ip)
+    {
         $ck =isset($_COOKIE['xvz'])?$_COOKIE['xvz']:'';
-        $gast =  Gast::where('ip',$ip)
-        ->orwhere('cookies',$ck)->first();
-        if($gast !=null){
-            if($gast->ip != $ip){
+        $gast =  Gast::where('ip', $ip)
+        ->orwhere('cookies', $ck)->first();
+        if ($gast !=null) {
+            if ($gast->ip != $ip) {
                 $gast->ip = $ip;
                 $gast->save();
-            }else if($gast->cookies != $ck){
+            } elseif ($gast->cookies != $ck) {
                 $mytime = Carbon::now();
                 $ck= md5($mytime->toDateTimeString().$ip);
                 $gast->cookies = $ck;
-                if($gast->save() ){
+                if ($gast->save()) {
                     setcookie('xvz', $ck, time() +  3600*24*30*12, '/');
                 }
             }
@@ -100,5 +106,4 @@ class ImageController extends Controller
         }
         return false;
     }
-    
 }

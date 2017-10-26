@@ -7,23 +7,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Image extends Model
 {
-   
- 
-
-
     use SoftDeletes;
     protected $dates = ['deleted_at'];
-    protected $fillable = ['path', 'win', 'gast_id'];
     
     public function likes()
     {
-        return $this->hasMany('App\Like') ;
-
-
-    }
-    public function gast()
-    {
-        return $this->belongsTo('App\Gast');
+        return $this->hasMany('App\Like');
     }
     public function m($id){
         return $this->hasMany('App\Like')->where('gast_id', $id);
@@ -36,9 +25,8 @@ class Image extends Model
             $offer->likes()->delete();
          });
     
-        //  Image::restoring(function ($offer) {
-        //        $offer->likes()->restore();
-        // });
+         Image::restoring(function ($offer) {
+               $offer->likes()->restore();
+        });
     }
-   
 }

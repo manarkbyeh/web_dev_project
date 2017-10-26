@@ -32,7 +32,6 @@ class LikeController extends Controller
         }
         return view('index');
     }
-
     private function checkGeust($request){
         $ck =isset($_COOKIE['xvz'])?$_COOKIE['xvz']:'';
         $ip = $request->ip();

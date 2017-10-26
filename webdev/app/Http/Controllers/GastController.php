@@ -79,6 +79,17 @@ class GastController extends Controller
             return "no";
         }
     }
+    public function restore($id)
+    {
+        $gast = Gast::withTrashed()->where('id',$id)->first();
+        if($gast != null && $gast->deleted_at != null){
+            $gast->restore();
+            return  "ok";
+        }else {
+            return "no";
+        }
+    }
+  
     
     public function redirectToProvider()
     {

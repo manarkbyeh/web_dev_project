@@ -1,11 +1,12 @@
 body {
     margin: 0;
-    padding: 40px 0 0;
+    padding: 80px 0 0;
     font-family: 'Open Sans', sans-serif;
     font-size: 14px;
     line-height: 26px;
     color: #6b6e80;
-    background-color: #fff;
+    background-color: #f7f7f7;
+    background-image: url(../img/body-bg.png);
     background-repeat: repeat
 }
 
@@ -398,7 +399,6 @@ h6 {
 }
 
 .sidebar-menu .nav-pills>li>a {
-    color: #1e1e1e;
     padding: 6px 15px;
     border-top: 1px solid #ddd;
     -webkit-border-radius: 0;
@@ -410,7 +410,6 @@ h6 {
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;
     -o-box-sizing: border-box;
-    font-family: GothamMedium, Arial, Helvetica, serif;
     box-sizing: border-box
 }
 
@@ -420,7 +419,7 @@ h6 {
 .sidebar-menu .nav-pills>li>a:focus,
 .sidebar-menu .nav-pills>li>a:hover {
     background-color: #f6f6f6;
-    color: #d82a91
+    color: #434a54
 }
 
 .team-container {
@@ -1783,4 +1782,8 @@ a.heart.animated {
     border-color: #D10074;
     color: #FFFFFF;
     min-width: 120px;
+}
+
+#image_preview{
+    overflow: hidden;
 }

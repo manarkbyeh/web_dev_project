@@ -7,51 +7,62 @@
     <div class="post-content">
       <!-- begin:article -->
       <div class="row">
-        <div class="blog-title">
-          @if($match !=null)
-          <div class="meta-date">
-            <span class="meta-date-day">{{date('d', strtotime( $match->start_at))}}</span>
-            <span class="meta-date-month">{{date('m', strtotime( $match->start_at))}}</span>
-            <span class="meta-date-year">{{date('Y', strtotime( $match->start_at))}}</span>
+      <div class="blog-title">
+      <div class="meta-date">
+      @if($match !=null)            
+        <span class="meta-date-day">{{date('d', strtotime( $match->start_at))}}</span>
+        <span class="meta-date-month">{{date('m', strtotime( $match->start_at))}}</span>
+        <span class="meta-date-year">{{date('Y', strtotime( $match->start_at))}}</span>
+      @else
+        <span class="meta-date-day">{{date('d')}}</span>
+        <span class="meta-date-month">{{date('m')}}</span>
+        <span class="meta-date-year">{{date('Y')}}</span>                      
+      @endif          
+      </div>
+      <div>
+        <h2>@if($match !=null) {{ $match->title }} @else Comming soon @endif</h2>
+        <small>By Manar </small>
+      </div>
+      @if($match !=null)
+      <div class="meta-date   meta-date2">
+        <span class="meta-date-day">{{date('d', strtotime( $match->end_at))}}</span>
+        <span class="meta-date-month">{{date('m', strtotime( $match->end_at))}}</span>
+        <span class="meta-date-year">{{date('Y', strtotime( $match->end_at))}}</span>
+      </div>
+      @endif
+    </div>
+    @if($match !=null)
+    <img src="{{asset('images/background.jpg')}}" alt="" class="img-responsive">
+              <blockquote>{{ $match->body }}</blockquote>
+              @php $arr =explode(",", $match->condition); @endphp @if(count($arr)>0)
+              <h3>Conditions : </h3>
+              <p>Je moet eerste aan de volgende voorwaarden voldaan om deel te nemen aan de wedstrijd</p>
+              <ul>
+                @foreach($arr as $c)
+                <li>{{ $c }}</li>
+                @endforeach
+              </ul>
+              @endif @endif
+              @if($match !=null)
+              <div class="row">
+                <div class="col-md-12">
+    
+                  <div class="col-md-4 col-md-offset-4 ">
+    
+                    <a href="{{url('/image')}}" class="btn btn-lg btn-default">START</a>
+    
+                  </div>
+              
+                </div>
+              </div>
+              @endif
+            </div>
+    
           </div>
-          @endif
-          <div>
-            <h2>@if($match !=null) {{ $match->title }} @else match not yet @endif</h2>
-            <small>By Manar </small>
-          </div>
-          @if($match !=null)
-          <div class="meta-date   meta-date2">
-            <span class="meta-date-day">{{date('d', strtotime( $match->start_at))}}</span>
-            <span class="meta-date-month">{{date('m', strtotime( $match->start_at))}}</span>
-            <span class="meta-date-year">{{date('Y', strtotime( $match->start_at))}}</span>
-          </div>
-          @endif
-        </div>
-        <img src="{{asset('images/background.jpg')}}" alt="" class="img-responsive">
-        @if($match !=null)
-      <blockquote>{{ $match->body }}</blockquote>
-      @php $arr =explode(",", $match->condition); @endphp @if(count($arr)>0)
-      <h3>Conditions : </h3>
-      <p>Je moet eerste aan de volgende voorwaarden voldaan om deel te nemen aan de wedstrijd</p>
-      <ul>
-        @foreach($arr as $c)
-        <li>{{ $c }}</li>
-        @endforeach
-      </ul>
-      @endif @endif
-      <div class="row">
-        <div class="col-md-12">
-          <div class="col-md-4 col-md-offset-4 ">
-            <a href="{{url('/image')}}" class="btn btn-lg btn-default">START</a>
-          </div>
-          
         </div>
       </div>
     </div>
-  </div>
-</div>
-</div>
-لالا
+    </div>
 @endsection @section('script')
 <script>
 $(document).ready(function() {
