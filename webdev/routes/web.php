@@ -13,9 +13,11 @@
 
 
 //Route::resource('/', 'MatchesController');
-
+Route::group(['middleware'=>'Lang'], function () {
+    Route::resource('match', 'MatchesController');
+});
 Route::resource('match', 'MatchesController');
-Route::delete('/match/{id}/restore', ['as' => 'match.restore','uses' => 'MatchesController@restore']);
+// Route::delete('/match/{id}/restore', ['as' => 'match.restore','uses' => 'MatchesController@restore']);
 
 Route::resource('/', 'HomeController');
 
@@ -28,7 +30,6 @@ Route::get('/Guest/', 'GastController@index');
 Route::get('/Guest/create', 'GastController@create');
 Route::post('/Guest', 'GastController@store')->name('Guest.store');
 Route::delete('/Guest/{id}/delete', ['as' => 'Guest.delete','uses' => 'GastController@delete']);
-Route::delete('/Guest/{id}/restore', ['as' => 'Guest.restore','uses' => 'GastController@restore']);
 
 
 

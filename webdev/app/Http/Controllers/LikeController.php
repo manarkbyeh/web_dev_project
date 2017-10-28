@@ -5,14 +5,26 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Gast;
 use App\Like;
+use App\Match;
 use Carbon\Carbon;
 
 class LikeController extends Controller
 {
+    private $idMatch = 0;
+    public function __construct()
+    {
+        $today = \Carbon\Carbon::today()->format('Y/m/d');
+        $match = Match::where('start_at', '>=', $today)
+        ->where('end_at', '>=', $today)->first();
+        if ($match == null) {
+            Redirect::to('/')->send();
+        } else {
+            $this->idMatch = $match->id;
+        }
+    }
+
     public function like(Request $request)
     {
-        
-        
         if($request->ajax()){
             $geust_id = $this->checkGeust($request);
             if($geust_id == false){
@@ -23,6 +35,7 @@ class LikeController extends Controller
                 $like = new \App\Like();
                 $like->gast_id = $geust_id;
                 $like->image_id =$request->image_id ;
+                $like->match_id =$this->idMatch ;
                 $like->save();
                 return 'add';
             }else{

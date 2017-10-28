@@ -7,10 +7,10 @@ use Illuminate\Database\Migrations\Migration;
 class CreateMatchesTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+    * Run the migrations.
+    *
+    * @return void
+    */
     public function up()
     {
         Schema::create('matches', function (Blueprint $table) {
@@ -20,19 +20,17 @@ class CreateMatchesTable extends Migration
             $table->string('condition');
             $table->integer('win_image_id')->default('0');
             $table->date('start_at');
-            $table->date('end_at');
-            $table->integer('user_id')->unsigned();            
+            $table->date('end_at');          
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
-
+    
     /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
+    * Reverse the migrations.
+    *
+    * @return void
+    */
     public function down()
     {
         Schema::dropIfExists('matches');

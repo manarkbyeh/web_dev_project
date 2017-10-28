@@ -34,9 +34,9 @@ class Gast extends Model
             $offer->likes()->delete();
          });
     
-        Gast::restoring(function ($offer) {
-               $offer->images()->restore();
-               $offer->likes()->restore();
-        });
+        // Gast::restoring(function ($offer) {
+        //        $offer->images()->restore();
+        //        $offer->likes()->restore();
+        // });
     }
 }

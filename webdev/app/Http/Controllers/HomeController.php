@@ -7,21 +7,13 @@ use App\Match;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-
-
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function index()
     {
-        $match = Match::orderBy('id', 'desc')->first();
+        $today = \Carbon\Carbon::today()->format('Y/m/d');
+        $match = Match::where('start_at','>=',$today)
+        ->where('end_at','>=',$today)->first();
+    
         return view("index",["match"=>$match]);
     }
 }

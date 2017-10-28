@@ -52,7 +52,7 @@ class GastController extends Controller
         
         $this->validate($request, array(
         'name'         => 'required|max:255',
-        'email'        => 'required|email|unique:gasts,email'
+        'email'          => 'required|unique:gasts'
         ));
         
         // store in the database
@@ -79,17 +79,6 @@ class GastController extends Controller
             return "no";
         }
     }
-    public function restore($id)
-    {
-        $gast = Gast::withTrashed()->where('id',$id)->first();
-        if($gast != null && $gast->deleted_at != null){
-            $gast->restore();
-            return  "ok";
-        }else {
-            return "no";
-        }
-    }
-  
     
     public function redirectToProvider()
     {

@@ -1,9 +1,8 @@
-@extends('main') @section('content')
-<center>  <img src="{{ asset('images/ipxl-logo.png') }}" style="width: 300px" class="img-responsive"></center>
-<br>
-@include('partials._saide')
-<div class="col-sm-9">
-  <div class="col-xs-12">
+@extends('main') @section('content') @include('partials._saide')
+
+
+<div class="col-md-9 ">
+  <div >
     <div class="post-container">
       <div class="post-content">
         <form action="{{url('/image')}}" method="post" style="widht:100%;margin-bottom:5px" enctype="multipart/form-data">
@@ -12,6 +11,7 @@
             <div class="col-xs-12 centered">
               <label id="img" for="file" style="cursor: pointer;margin:40px 35%;" class="text-center">
                 <div id="image_preview"><img id="previewing" class='center' src="{{asset('/img/upload.png')}}" /></div>
+
                 <h3>Brows...</h3>
               </label>
             </div>
@@ -27,34 +27,41 @@
 
 
 
+
 @endsection @section('script')
+
 <script type="text/javascript">
-$(document).ready(function(e) {
-$(function() {
-$("#file").change(function() {
-$("#message").empty(); // To remove the previous error message
-var file = this.files[0];
-var imagefile = file.type;
-var match = ["image/jpeg", "image/png", "image/jpg"];
-if (!((imagefile == match[0]) || (imagefile == match[1]) || (imagefile == match[2]))) {
-$('#previewing').attr('src', 'img/upload.png');
-$("#message").html("<p id='error'>Please Select A valid Image File</p><h4>Note</h4><span id='error_message'>Only jpeg, jpg and png Images type allowed</span>");
-return false;
-} else {
-var reader = new FileReader();
-reader.onload = imageIsLoaded;
-reader.readAsDataURL(this.files[0]);
-}
-});
-});
-function imageIsLoaded(e) {
-$("#file").css("color", "green");
-$('#image_preview').css("display", "block");
-$('#previewing').attr('src', e.target.result);
-$('#upload').attr('style', 'display:block');
-$('#img').attr('style', '');
-$('#previewing').attr('style', 'width:100%;max-height:400px');
-};
-});
+  $(document).ready(function(e) {
+
+    $(function() {
+      $("#file").change(function() {
+        $("#message").empty(); // To remove the previous error message
+        var file = this.files[0];
+        var imagefile = file.type;
+        var match = ["image/jpeg", "image/png", "image/jpg"];
+        if (!((imagefile == match[0]) || (imagefile == match[1]) || (imagefile == match[2]))) {
+          $('#previewing').attr('src', 'img/upload.png');
+          $("#message").html("<p id='error'>Please Select A valid Image File</p><h4>Note</h4><span id='error_message'>Only jpeg, jpg and png Images type allowed</span>");
+          return false;
+        } else {
+          var reader = new FileReader();
+          reader.onload = imageIsLoaded;
+          reader.readAsDataURL(this.files[0]);
+
+        }
+      });
+    });
+
+    function imageIsLoaded(e) {
+      $("#file").css("color", "green");
+      $('#image_preview').css("display", "block");
+      $('#previewing').attr('src', e.target.result);
+
+      $('#upload').attr('style', 'display:block');
+      $('#img').attr('style', '');
+
+      $('#previewing').attr('style', 'width:100%;max-height:400px');
+    };
+  });
 </script>
 @endsection

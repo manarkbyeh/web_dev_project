@@ -17,10 +17,8 @@ class CreateGastsTable extends Migration
             $table->increments('id');
             $table->string('ip');
             $table->string('cookies');
-            
             $table->string('name');
             $table->string('email')->unique();
-            
             $table->timestamps();
             $table->softDeletes();
             

@@ -1,8 +1,10 @@
+
 <div class="col-md-3">
   <div class="row">
     <div class="post-container">
       <div class="sidebar-menu">
       <ul class="nav nav-pills nav-stacked">
+
       <li @if($active && $active == 'upload') class='active' @endif  ><a href="{{url('/image/upload')}}"><i class="fa fa-clock-o"></i> Add Picture</a></li>
       <li @if($active && $active == 'index') class='active' @endif  ><a href="{{url('/image')}}"><i class="fa fa-clock-o"></i> Newest</a></li>
       <li @if($active && $active == 'popular') class='active' @endif  ><a href="{{url('/image/popular')}}"><i class="fa fa-star-o"></i> Popular</a></li>

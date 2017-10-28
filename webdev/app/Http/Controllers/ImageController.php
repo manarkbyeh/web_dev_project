@@ -8,6 +8,7 @@ use Illuminate\Http\UploadedFile;
 use App\Image;
 use App\Gast;
 use App\Like;
+use App\Match;
 
 use Session;
 
@@ -18,7 +19,25 @@ use Auth;
 
 class ImageController extends Controller
 {
-  
+    private $idMatch = 0;
+    public function __construct()
+    {
+        $today = \Carbon\Carbon::today()->format('Y/m/d');
+        $match = Match::where('start_at', '>=', $today)
+        ->where('end_at', '>=', $today)->first();
+        
+        if ($match == null) {
+            Redirect::to('/')->send();
+            
+        } else {
+            $this->idMatch = $match->id;
+        }
+    }
+
+   
+
+
+
     public function index()
     {
             $images =Image::withCount('likes')->get();
@@ -51,6 +70,7 @@ class ImageController extends Controller
         if ($request->hasFile('image')) :
             $image->path = $request->image->store('images');
             $image->gast_id = $idGeust;
+            $image->match_id = $this->idMatch;
             $image->save();
             return redirect('/image')->with('Success', 'successfully saved');
         endif;
@@ -67,7 +87,7 @@ class ImageController extends Controller
             if ($image->gast_id != $idGuest) {
                 return 'no';
             }
-            $image->forceDelete();
+            $image->delete();
             return 'ok';
         }
     }
