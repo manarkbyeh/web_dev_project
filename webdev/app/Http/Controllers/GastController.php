@@ -52,7 +52,7 @@ class GastController extends Controller
         
         $this->validate($request, array(
         'name'         => 'required|max:255',
-        'email'          => 'required|unique:gasts'
+        'email'        => 'required|email|unique:gasts,email'
         ));
         
         // store in the database

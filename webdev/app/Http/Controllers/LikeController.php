@@ -14,7 +14,7 @@ class LikeController extends Controller
     public function __construct()
     {
         $today = \Carbon\Carbon::today()->format('Y/m/d');
-        $match = Match::where('start_at', '>=', $today)
+        $match = Match::where('start_at', '<=', $today)
         ->where('end_at', '>=', $today)->first();
         if ($match == null) {
             Redirect::to('/')->send();

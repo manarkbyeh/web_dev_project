@@ -18,12 +18,20 @@
           <div class="widget-title">
             <h3>Winners</h3>
           </div>
-          <u>
-             <li>lsdflkfsdkldfdkls</li>
-             <li>lsdflkfsdkldfdkls</li>
-             <li>lsdflkfsdkldfdkls</li>
-             <li>lsdflkfsdkldfdkls</li>
-           </u>
+           @foreach($winners as $winner)
+            <ul>
+             <li>{{$winner->image->gast->name}}</li>
+           </ul>
+          @endforeach
+          @if($winners->count())
+            <div class="row">
+            <div class="col-md-12">
+              <div class="col-md-4 col-md-offset-4 centered ">
+                <a href="{{url('/image/win')}}" class="btn btn-lg btn-default">Show</a>
+              </div>
+            </div>
+          </div>
+          @endif
         </div>
       </div>
     </div>
@@ -75,11 +83,8 @@
           @if($match !=null)
           <div class="row">
             <div class="col-md-12">
-
-              <div class="col-md-4 col-md-offset-4 ">
-
-                <a href="{{url('/image')}}" class="btn btn-lg btn-default">START</a>
-
+              <div class="col-md-4 col-md-offset-4 centered">
+                <a href="{{url('/image')}}" class="btn btn-lg btn-default btn-pink">START</a>
               </div>
           
             </div>
@@ -96,8 +101,6 @@
 @endsection @section('script')
 <script>
   $(document).ready(function() {
-
-
     $.fn.extend({
       animateCss: function(animationName) {
         var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';

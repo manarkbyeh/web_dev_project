@@ -39,6 +39,9 @@ Route::delete('image/{id}/delete', ['as' => 'image.delete','uses' => 'ImageContr
 Route::get('/image/upload', 'ImageController@upload' );
 Route::get('/image/popular', 'ImageController@popular' );
 Route::get('/image/last_image', 'ImageController@last_image' );
+Route::post('/image/invite', 'ImageController@invite' );
+Route::get('/image/win', 'ImageController@win' );
+Route::get('/image/{id}', 'ImageController@index' );
 
 
 

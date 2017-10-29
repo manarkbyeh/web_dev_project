@@ -14,9 +14,14 @@ class Image extends Model
     {
         return $this->hasMany('App\Like');
     }
+    public function gast()
+    {
+        return $this->belongsTo('App\Gast');
+    }
     public function m($id){
         return $this->hasMany('App\Like')->where('gast_id', $id);
     }
+    
     protected static function boot()
     {
         parent::boot();
@@ -25,8 +30,8 @@ class Image extends Model
             $offer->likes()->delete();
          });
     
-         Image::restoring(function ($offer) {
-               $offer->likes()->restore();
-        });
+        //  Image::restoring(function ($offer) {
+        //        $offer->likes()->restore();
+        // });
     }
 }

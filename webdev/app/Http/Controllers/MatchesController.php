@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Match;
+use Illuminate\Support\Facades\Auth;
 
 class MatchesController extends Controller
 {
@@ -18,12 +19,10 @@ class MatchesController extends Controller
         return view("home.index", ["matches"=>$matches]);
     }
     
-  
     public function create()
     {
         return view('home.create');
     }
-    
    
     public function store(Request $request)
     {
@@ -40,13 +39,14 @@ class MatchesController extends Controller
         if ($res >0) {
                 return back()->withInput()->withErrors(['hedha etari5 ma7jouzon mosba9an']);
         }
-        $matches = new Match();
-        $matches->title = $request->title;
-        $matches->body = $request->body;
-        $matches->condition = $request->conditions;
-        $matches->start_at = $request->start_at;
-        $matches->end_at = $request->end_at;
-        if ($matches->save()) {
+        $matche = new Match();
+        $matche->title = $request->title;
+        $matche->body = $request->body;
+        $matche->condition = $request->conditions;
+        $matche->start_at = $request->start_at;
+        $matche->end_at = $request->end_at;
+        $matche->user_id = Auth::user()->id;
+        if ($matche->save()) {
             session()->flash('success', 'Article added successfuly !!');
             return redirect('/match');
         }
@@ -89,6 +89,7 @@ class MatchesController extends Controller
         $match->condition = $request->input('conditions');
         $match->start_at = $request->input('start_at');
         $match->end_at = $request->input('end_at');
+        $match->user_id = Auth::user()->id;
         if ($match->save()) {
             session()->flash('success', 'Article edited successfuly !!');
             return redirect('/match');
