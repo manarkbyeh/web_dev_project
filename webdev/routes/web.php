@@ -20,7 +20,7 @@ Route::resource('match', 'MatchesController');
 // Route::delete('/match/{id}/restore', ['as' => 'match.restore','uses' => 'MatchesController@restore']);
 
 Route::resource('/', 'HomeController');
-
+Route::get('/test', 'HomeController@test');
 Route::post('like', 'LikeController@like');
 
 

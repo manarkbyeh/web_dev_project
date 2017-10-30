@@ -2,55 +2,36 @@
 <!-- begin:content -->
 <div id="content">
   <div class="container">
-  <div class="row">
-  @include('partials._saide')
-  {{csrf_field()}}
-  <!-- break -->
-  <div clas="col-md-9">
-    @foreach ($images as $image)
-    <div class="col-md-3 col-sm-6 col-xs-12 ">
-      <div class="post-container">
-        <div class="post-image">
-          <a href="{{asset('/storage/'.$image->path)}}" class="img-group-gallery" title="{{$image->gast->name}}">
-          <div class="img" style="background-image:url({{asset('/storage/'.$image->path)}});"></div>                
-          </a>
+    <div class="row">
+      {{csrf_field()}}
+      <!-- break -->
+      <div clas="col-md-9">
+        @foreach ($winners as $winner)
+        <div class="col-md-3 col-sm-6 col-xs-12 ">
+          <div class="post-container">
+            <div class="post-image">
+              <a href="{{asset('/storage/'.$winner->image->path)}}" class="img-group-gallery" title="{{$winner->image->gast->name}}">
+              <div class="img" style="background-image:url({{asset('/storage/'.$winner->image->path)}});"></div>                
+              </a>
+            </div>
+            <div class="post-meta">
+             <ul class="list-meta list-inline centered">
+                <li>{{$winner->image->gast->name}}</li>
+            </div>
+          </div>
         </div>
-        <div class="post-meta">
-          <ul class="list-meta list-inline">
-            <li>
-              <a href="javascript:void(0)" class="heart animated" data-idimg="{{$image->id}}">
-                <i @if($image->m($idgust)->first()) class="fa fa-heart fa-lg blue"  @else class="fa fa-heart fa-lg" @endif ></i>
-                <label>@if($image->likes_count) {{$image->likes_count}} @else 0  @endif </label>
-              </a>
-            </li>
-            @if($image->gast_id==$idgust)
-            <li class="pull-right">
-              <a href="javascript:void(0)" data-idimg="{{$image->id}}" class="btndelete" data-token="{{ csrf_token() }}">
-                <i class="fa fa-remove fa-lg"></i>
-              </a>
-            </li>
-            <li class="pull-right">  
-             <a href="javascript:void(0)" data-idimg="{{$image->id}}" class="invite" data-token="{{ csrf_token() }}">
-                <i class="fa fa-envelope fa-lg" ></i>
-              </a>
-            </li>
-            @endif
-
-          </ul>
-        </div>
+        @endforeach
+        <ul></ul>
       </div>
+
+
     </div>
-    @endforeach
-
-  </div>
-
-
-</div>
   </div>
 </div>
 <!-- end:content -->
 
 @endsection @section('script')
+
 <script>
   $(document).ready(function() {
     $.ajaxSetup({
@@ -59,7 +40,7 @@
       }
     });
 
-    $("body").on('click','.heart', function() {
+    $('.heart').on('click', function() {
       var btn = $(this);
 
       $.ajax({
@@ -149,52 +130,6 @@
       });
 
     });
-
-
-  $("body").on('click', '.invite', function(){
-    var id = $(this).attr("data-idimg");
-    swal({
-      title: 'Send Invitation',
-      input: 'email',
-      showCancelButton: true,
-      confirmButtonText: 'Submit',
-      showLoaderOnConfirm: true,
-      preConfirm: function (email) {
-        return new Promise(function (resolve, reject) {
-            $.ajax({
-              url: "{{url('/image/invite')}}",
-              type: "POST",
-              data: {
-                image_id: id ,
-                email: email
-              },
-              success: function(data) {
-                if (data == "ok") {
-                  resolve()
-                } else if (data == "email") {
-                   reject('Invalid email address');
-                } else if (data == "redirect") {
-                   top.location = "{{url('/Guest/create')}}";
-                }
-              },
-              errors: function(){
-                reject('Something is wrong,try again')
-              }
-            });
-        })
-      },
-      allowOutsideClick: false
-    }).then(function (email) {
-      swal({
-        type: 'success',
-        title: 'Ajax request finished!',
-        html: 'Submitted email: ' + email
-      })
-    })
-  })
-
-
-
 
 
   });
