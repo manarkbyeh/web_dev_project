@@ -13,17 +13,19 @@ use App\Like;
 
 use Mail;
 use Excel;
+
 class HomeController extends Controller
 {
     
+     
     public function index()
     {
         //get match = today
         $today = \Carbon\Carbon::today()->format('Y/m/d');
-        $match = Match::where('start_at', '>=', $today)
+        $match = Match::where('start_at', '<=', $today)
         ->where('end_at', '>=', $today)->first();
         //get Match win and Image and gast
-        $winners = Match::onlyTrashed()->where('win_image_id', '>', 0)->with(['image' => function ($query) {
+        $winners = Match::where('win_image_id', '>', 0)->with(['image' => function ($query) {
                 $query->with('gast');
         }])->paginate(5);
 
@@ -57,8 +59,8 @@ class HomeController extends Controller
 
         //check old  match winner
         $m = Match::where('win_image_id', 0)
+        ->where('end_at', '<=', $today)
         ->first();
-  
         if ($m->count()) {
             //get all image with countLikes
             $images =Image::where('match_id', $m->id)
@@ -78,7 +80,7 @@ class HomeController extends Controller
                 }
                     $match = Match::where('id', $m->id)->with('user')->first();
                     $match->win_image_id = $winnerId;
-                    $match->deleted_at = \Carbon\Carbon::now();
+                    // $match->deleted_at = \Carbon\Carbon::now();
                     $match->save();
                     Image::where('deleted_at', null)->delete();
                     Like::where('deleted_at', null)->delete();

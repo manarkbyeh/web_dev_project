@@ -19,12 +19,10 @@ class MatchesController extends Controller
         return view("home.index", ["matches"=>$matches]);
     }
     
-  
     public function create()
     {
         return view('home.create');
     }
-    
    
     public function store(Request $request)
     {

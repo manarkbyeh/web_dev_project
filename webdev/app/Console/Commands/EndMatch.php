@@ -44,6 +44,7 @@ class EndMatch extends Command
      *
      * @return mixed
      */
+
     public function handle()
     {
         //get new guests
@@ -69,7 +70,7 @@ class EndMatch extends Command
 
         //check old  match winner
         $m = Match::where('win_image_id', 0)
-        ->where('end_at', '<', $today)
+        ->where('end_at', '<=', $today)
         ->first();
         if ($m->count()) {
             //get all image with countLikes
@@ -90,7 +91,7 @@ class EndMatch extends Command
                 }
                     $match = Match::where('id', $m->id)->with('user')->first();
                     $match->win_image_id = $winnerId;
-                    $match->deleted_at = \Carbon\Carbon::now();
+                    // $match->deleted_at = \Carbon\Carbon::now();
                     $match->save();
                     Image::where('deleted_at', null)->delete();
                     Like::where('deleted_at', null)->delete();

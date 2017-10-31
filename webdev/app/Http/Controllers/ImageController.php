@@ -123,7 +123,7 @@ class ImageController extends Controller
     private function checkMatch()
     {
         $today = \Carbon\Carbon::today()->format('Y/m/d');
-        $match = Match::where('start_at', '>=', $today)
+        $match = Match::where('start_at', '<=', $today)
         ->where('end_at', '>=', $today)->first();
         
         if ($match == null) {
@@ -135,7 +135,7 @@ class ImageController extends Controller
 
     public function win()
     {
-        $winners = Match::onlyTrashed()->where('win_image_id', '>', 0)->with(['image' => function ($query) {
+        $winners = Match::where('win_image_id', '>', 0)->with(['image' => function ($query) {
             $query->with('gast');
         }])->paginate(5);
         return view("images.winImage", ["winners" =>$winners
@@ -173,10 +173,9 @@ class ImageController extends Controller
                 $email = $request->input('email');
                 $image_id =  $request->input('image_id');
                 //check exist image created by guest id
-                $img =  Image::find($image_id)->with(['gast'=>function ($query) use ($gast) {
+                $img =  Image::where('id',$image_id)->with(['gast'=>function ($query) use ($gast) {
                     $query->where('id', $gast->id);
                 }])->first();
-              
                 if ($img) {
                     $data = [
                         'name'=>$img->gast->name,

@@ -21,7 +21,7 @@
       </thead>
       <tbody>
         @foreach ( $matches as $match)
-        <tr  @if($match->deleted_at !=null) class="deleted"@endif>
+        <tr  @if($match->deleted_at !=null) class="deleted" @elseif($match->win_image_id) class="old" @endif>
           <th>{{ $match->id }}</th>
           <td> {{ substr(strip_tags($match->title), 0, 50) }}{{ strlen(strip_tags($match->title)) > 50 ? "..." : "" }}</td>
           <td> {{ substr(strip_tags($match->body), 0, 30) }}{{ strlen(strip_tags($match->body)) > 30 ? "..." : "" }}</td>
@@ -29,6 +29,9 @@
           <td>{{ date('M j, Y', strtotime($match->start_at)) }}</td>
           <td>{{ date('M j, Y', strtotime($match->end_at)) }}</td>
             @if($match->deleted_at ==null)
+          <td>       
+     
+          </td>
           <td>
             <a href="javascript:void(0)" data-idmatch="{{$match->id}}" class="btn btn-default btn-sm btndelete" data-token="{{ csrf_token() }}">
                Delete
@@ -37,6 +40,12 @@
           <td>       
             <a href="{{ route('match.edit', $match->id) }}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"></span>Edit</a>
           </td>
+          <td>  
+          <a href="{{ route('periods.index', $match->id) }}" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-pencil"></span>Periodes</a>
+          </td>
+          @else
+          <td></td>
+          <td></td>
           @endif
         </tr>
         @endforeach
@@ -81,10 +90,9 @@
             });
           } else if (data == "ok") {
             swal("Good job!", "You clicked the button!", "success").then(function() {
-                val.parent( "td" ).parent( "tr" ).addClass('deleted');
-              val.removeClass('btndelete').removeClass('btn-default');
-              val.parent( "td" ).next( "td").remove();
-              val.parent( "td" ).remove();
+                val.parent( "td" ).parent( "tr" ).removeClass('old').addClass('deleted');
+              val.parent( "td" ).next( "td").text('');
+              val.parent( "td" ).text('');
             });
           };
           return false;

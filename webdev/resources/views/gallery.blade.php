@@ -2,55 +2,56 @@
 <!-- begin:content -->
 <div id="content">
   <div class="container">
-  <div class="row">
-  @include('partials._saide')
-  {{csrf_field()}}
-  <!-- break -->
-  <div clas="col-md-9">
-    @foreach ($images as $image)
-    <div class="col-md-3 col-sm-6 col-xs-12 ">
-      <div class="post-container">
-        <div class="post-image">
-          <a href="{{asset('/storage/'.$image->path)}}" class="img-group-gallery" title="{{$image->gast->name}}">
-          <div class="img" style="background-image:url({{asset('/storage/'.$image->path)}});"></div>                
-          </a>
-        </div>
-        <div class="post-meta">
-          <ul class="list-meta list-inline">
-            <li>
-              <a href="javascript:void(0)" class="heart animated" data-idimg="{{$image->id}}">
-                <i @if($image->m($idgust)->first()) class="fa fa-heart fa-lg blue"  @else class="fa fa-heart fa-lg" @endif ></i>
-                <label>@if($image->likes_count) {{$image->likes_count}} @else 0  @endif </label>
+    <div class="row">
+      @include('partials._saide')
+      {{csrf_field()}}
+      <!-- break -->
+      <div clas="col-md-9">
+        @foreach ($images as $image)
+        <div class="col-md-3 col-sm-6 col-xs-12 ">
+          <div class="post-container">
+            <div class="post-image">
+              <a href="{{asset('/storage/'.$image->path)}}" class="img-group-gallery" title="{{$image->gast->name}}">
+              <div class="img" style="background-image:url({{asset('/storage/'.$image->path)}});"></div>                
               </a>
-            </li>
-            @if($image->gast_id==$idgust)
-            <li class="pull-right">
-              <a href="javascript:void(0)" data-idimg="{{$image->id}}" class="btndelete" data-token="{{ csrf_token() }}">
-                <i class="fa fa-remove fa-lg"></i>
-              </a>
-            </li>
-            <li class="pull-right">  
-             <a href="javascript:void(0)" data-idimg="{{$image->id}}" class="invite" data-token="{{ csrf_token() }}">
-                <i class="fa fa-envelope fa-lg" ></i>
-              </a>
-            </li>
-            @endif
+            </div>
+            <div class="post-meta">
+              <ul class="list-meta list-inline">
+                <li>
+                  <a href="javascript:void(0)" class="heart animated" data-idimg="{{$image->id}}">
+                    <i @if($image->m($idgust)->first()) class="fa fa-heart fa-lg blue"  @else class="fa fa-heart fa-lg" @endif ></i>
+                    <label>@if($image->likes_count) {{$image->likes_count}} @else 0  @endif </label>
+                  </a>
+                </li>
+                @if($image->gast_id==$idgust)
+                <li class="pull-right">
+                  <a href="javascript:void(0)" data-idimg="{{$image->id}}" class="btndelete" data-token="{{ csrf_token() }}">
+                    <i class="fa fa-remove fa-lg"></i>
+                  </a>
+                </li>
+                <li class="pull-right">  
+                 <a href="javascript:void(0)" data-idimg="{{$image->id}}" class="invite" data-token="{{ csrf_token() }}">
+                    <i class="fa fa-envelope fa-lg" ></i>
+                  </a>
+                </li>
+                @endif
 
-          </ul>
+              </ul>
+            </div>
+          </div>
         </div>
+        @endforeach
+
       </div>
+
+
     </div>
-    @endforeach
-
-  </div>
-
-
-</div>
   </div>
 </div>
 <!-- end:content -->
 
 @endsection @section('script')
+
 <script>
   $(document).ready(function() {
     $.ajaxSetup({
