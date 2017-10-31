@@ -17,11 +17,13 @@ class CreatePeriodsTable extends Migration
             $table->increments('id');
             $table->integer("match_id")->unsigned();
             $table->string("title");
-            $table->date("start");
-            $table->date("end");
+            $table->datetime("start");
+            $table->integer('win_image_id')->default('0');
+            $table->datetime("end");
             $table->integer("active")->default(0);
             $table->foreign('match_id')->references('id')->on('matches')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

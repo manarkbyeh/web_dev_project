@@ -15,20 +15,19 @@ class PeriodsController extends Controller
 
     public function index($id)
     {
-        $periods = Period::where('match_id', '=', $id)->get();
-        $match = Match::where('id', '=', $id)->first();
-  
-        return view("periods.index", ["periods"=>$periods, "match"=>$match]);
-    }
+        // Find match
+        if(! $match = Match::find($id)){
+            return abort(404);
+        }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        // Find maych periods.
+        $periods = Period::where('match_id', $match->id)->get();
+
+        // Get latest period
+        $latestPeriod = Period::orderBy('end', 'DESC')->first();
+    
+        // Let's view periods list.
+        return view("periods.index", compact('periods', 'match', 'latestPeriod'));
     }
 
     /**
@@ -38,83 +37,108 @@ class PeriodsController extends Controller
      * @return \Illuminate\Http\Response
      */
     
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
-     
-        
-        $this->validate($request, array(
-            'title'          => 'required',
-
-            'start'       => 'required|date|after_or_equal:'.\Carbon\Carbon::today(),
-            'end'         => 'required|date|after_or_equal:start_at',
-            ));
-   
-            $res =  Period::whereBetween('start', [$request->start, $request->end])
-            ->orWhereBetween('end', [$request->start, $request->end])
-            ->count();
-            if ($res >0) {
-                return back()->withInput()->withErrors(['Deze match bestaat al']);
+        // Find match
+        if(! $match = Match::find($id)){
+            return abort(404);
         }
-            $Period = new Period();
-            $Period->title = $request->title;
-            $Period->start = $request->start;
-            $Period->end = $request->end;
-            $Period->match_id = $request->match_id;
-       
-            
-          
-   
-         
-            if ($Period->save()) {
-             
-    
-                session()->flash('success', 'Article added successfuly !!');
-                return redirect('/match');
+
+
+        if($match->periods->count() < 4){
+            // validation
+            $this->validate($request,[
+                'title'     => 'required',
+                'start'     => 'required|date|after_or_equal:'.\Carbon\Carbon::today(),
+                'end'       => 'required|date|after_or_equal:start_at',
+            ]);
+
+            // Check if this period not added to this match before.
+            if($res = Period::whereBetween('start', [$request->start, $request->end])->orWhereBetween('end', [$request->start, $request->end])->count()){
+                return back()->withInput()->withErrors(['This period added  before !']);
             }
+
+            // Get the latest period for this match
+            if($latestPeriod = Period::orderBy('end', 'DESC')->first()){
+                
+                if($latestPeriod->end >= $request->get('start') || $latestPeriod->end >= $request->get('end')){
+                    return back()->withInput()->withErrors(['This period start/end is exist !']);
+                }
+            }
+
+
+            // $now = Carbon::now();
+            // if($request->start < $now){
+            //     $active = 1;
+            // }else{
+            //     $active = 0;
+            // }
+
+            // Add new period
+            if($match->periods()->create(['title' => $request->get('title'), 'start' => $request->start, 'end' => $request->get('end')])){
+                session()->flash('success', 'Period added successfuly !!');
+            } else {
+                session()->flash('error', 'Period not added successfully !!');
+            }
+
+        } else {
+            session()->flash('error', 'You can not add more that 4 period per match !!');
+        }
+        
+       
+        // Redirect to periods list
+        return redirect()->route('periods.index', $id);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+   
     public function edit($id)
     {
-        //
+        $period = Period::find($id);
+        
+        return view('periods.edit')->withPeriod($period);
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
+  
     public function update(Request $request, $id)
     {
-        //
-    }
+       // validation
+       $this->validate($request,[
+        'title'     => 'required',
+        'start'     => 'required|date|after_or_equal:'.\Carbon\Carbon::today(),
+        'end'       => 'required|date|after_or_equal:start_at',
+    ]);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+        if($period = Period::find($id)){
+            $match->update([
+                'title' => $request->get('title'),
+                'start' => $request->get('start'),
+                'end' => $request->get('end'),
+            ]);
+
+            session()->flash('success', 'Period edited successfuly !!');
+        } else {
+            session()->flash('error', 'Period not found !!');
+        }
+
+
+        // Redirect to periods index page.
+        return redirect()->route('periods.index', $id);
+    }
+    
     public function destroy($id)
     {
-        //
+        if($period = Period::withTrashed()->where('id', $id)->first()){
+            if ($period != null && $period->deleted_at == null) {
+                $period->delete();
+                return  "ok";
+            } else {
+                return "no";
+            }
+        } else {
+            session()->flash('error', 'Match not found !!');
+        }
+       
+        // Redirect to matches index page.
+        return redirect()->route('periods.index', $id);
     }
 }

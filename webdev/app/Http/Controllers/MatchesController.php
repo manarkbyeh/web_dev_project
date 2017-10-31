@@ -26,30 +26,26 @@ class MatchesController extends Controller
    
     public function store(Request $request)
     {
-        $this->validate($request, array(
+        // validation
+        $this->validate($request, [
+            'title'          => 'required',
+            'body'           => 'required',
+        ]);
         
-        'title'          => 'required',
-        'body'           => 'required',
-        'start_at'       => 'required|date|after_or_equal:'.\Carbon\Carbon::today(),
-        'end_at'         => 'required|date|after_or_equal:start_at',
-        ));
-        $res =  Match::whereBetween('start_at', [$request->start_at, $request->end_at])
-        ->orWhereBetween('end_at', [$request->start_at, $request->end_at])
-        ->count();
-        if ($res >0) {
-                return back()->withInput()->withErrors(['hedha etari5 ma7jouzon mosba9an']);
+        // Let's create new match
+        if(Match::create([
+            'title' => $request->get('title'),
+            'body' => $request->get('body'),
+            'condition' => $request->get('condition'),
+            'user_id' => Auth::user()->id,
+        ])){
+            session()->flash('success', 'Match added successfuly !!');
+        } else {
+            session()->flash('error', 'Failed to add new match !!');
         }
-        $matche = new Match();
-        $matche->title = $request->title;
-        $matche->body = $request->body;
-        $matche->condition = $request->conditions;
-        $matche->start_at = $request->start_at;
-        $matche->end_at = $request->end_at;
-        $matche->user_id = Auth::user()->id;
-        if ($matche->save()) {
-            session()->flash('success', 'Article added successfuly !!');
-            return redirect('/match');
-        }
+
+        // Redirect to matches index page
+        return redirect('/match');
     }
     
    
@@ -68,53 +64,43 @@ class MatchesController extends Controller
   
     public function update(Request $request, $id)
     {
-        $this->validate($request, array(
+        // validation
+        $this->validate($request, [
             'title'          => 'required',
             'body'           => 'required',
-            'start_at'       => 'required|date',
-            'end_at'         => 'required|date|after_or_equal:start_at|after_or_equal:'.\Carbon\Carbon::today(),
-            ));
-            $res =  Match::where('id','!=',$id)
-            ->Where(function($query) use ($request){
-                $query->whereBetween('start_at', [$request->start_at, $request->end_at])
-                ->orWhereBetween('end_at', [$request->start_at, $request->end_at]);
-            })
-            ->count();
-        if ($res >0) {
-            return back()->withInput()->withErrors(['hedha etari5 ma7jouzon mosba9an']);
+        ]);
+
+        if($match = Match::find($id)){
+            $match->update([
+                'title' => $request->get('title'),
+                'body' => $request->get('body'),
+                'condition' => $request->get('condition'),
+            ]);
+
+            session()->flash('success', 'Match edited successfuly !!');
+        } else {
+            session()->flash('error', 'Match not found !!');
         }
-        $match = Match::find($id);
-        $match->title = $request->input('title');
-        $match->body = $request->input('body');
-        $match->condition = $request->input('conditions');
-        $match->start_at = $request->input('start_at');
-        $match->end_at = $request->input('end_at');
-        $match->user_id = Auth::user()->id;
-        if ($match->save()) {
-            session()->flash('success', 'Article edited successfuly !!');
-            return redirect('/match');
-        }
+
+
+        // Redirect to matches index page.
+        return redirect('/match');
     }
     
- 
     public function destroy($id)
     {
-        $match = Match::withTrashed()->where('id', $id)->first();
-        if ($match != null && $match->deleted_at == null) {
-            $match->delete();
-            return  "ok";
+        if($match = Match::withTrashed()->where('id', $id)->first()){
+            if ($match != null && $match->deleted_at == null) {
+                $match->delete();
+                return  "ok";
+            } else {
+                return "no";
+            }
         } else {
-            return "no";
+            session()->flash('error', 'Match not found !!');
         }
+       
+        // Redirect to matches index page.
+        return redirect('/match');
     }
-    // public function restore($id)
-    // {
-    //     $match = Match::withTrashed()->where('id', $id)->first();
-    //     if ($match != null && $match->deleted_at != null) {
-    //         $match->restore();
-    //         return  "ok";
-    //     } else {
-    //         return "no";
-    //     }
-    // }
 }

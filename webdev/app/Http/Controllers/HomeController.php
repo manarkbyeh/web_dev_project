@@ -10,7 +10,7 @@ use DB;
 use App\Winner;
 use App\Gast;
 use App\Like;
-
+use App\Period;
 use Mail;
 use Excel;
 
@@ -20,19 +20,22 @@ class HomeController extends Controller
      
     public function index()
     {
-        //get match = today
-        $today = \Carbon\Carbon::today()->format('Y/m/d');
-        $match = Match::where('start_at', '<=', $today)
-        ->where('end_at', '>=', $today)->first();
-        //get Match win and Image and gast
-        $winners = Match::where('win_image_id', '>', 0)->with(['image' => function ($query) {
-                $query->with('gast');
-        }])->paginate(5);
-
-        return view("index", [
-            "match"=>$match,
-            "winners" =>$winners
-            ]);
+        // Get today
+        $now = Carbon::now();
+        
+                // Get today's match
+                $match = Match::whereHas('periods', function($query) use ($now){
+                    $query->where('start', '<=' , $now )
+                    ->where('end', '>' , $now );
+                })->first();
+          
+                // Get Match winners and Image and gast
+                $winners = Period::where('win_image_id', '>', 0)->with(['image' => function ($query) {
+                    $query->with('gast');
+                }])->limit(5)->get();
+            
+        
+                return view("index", compact('match', 'winners'));
     }
     public function test()
     {

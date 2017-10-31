@@ -18,35 +18,36 @@
         <th>Conditions</th>
         <th>Start</th>
         <th>End</th>
+        <th>Actions</th>
       </thead>
       <tbody>
         @foreach ( $matches as $match)
         <tr  @if($match->deleted_at !=null) class="deleted" @elseif($match->win_image_id) class="old" @endif>
-          <th>{{ $match->id }}</th>
+          <td>{{ $match->id }}</td>
           <td> {{ substr(strip_tags($match->title), 0, 50) }}{{ strlen(strip_tags($match->title)) > 50 ? "..." : "" }}</td>
           <td> {{ substr(strip_tags($match->body), 0, 30) }}{{ strlen(strip_tags($match->body)) > 30 ? "..." : "" }}</td>
           <td>{{ substr(strip_tags($match->condition), 0, 30) }}{{ strlen(strip_tags($match->condition)) > 30 ? "..." : "" }}</td>
           <td>{{ date('M j, Y', strtotime($match->start_at)) }}</td>
           <td>{{ date('M j, Y', strtotime($match->end_at)) }}</td>
-            @if($match->deleted_at ==null)
-          <td>       
-     
-          </td>
-          <td>
-            <a href="javascript:void(0)" data-idmatch="{{$match->id}}" class="btn btn-default btn-sm btndelete" data-token="{{ csrf_token() }}">
-               Delete
-            </a> 
-          </td>
-          <td>       
-            <a href="{{ route('match.edit', $match->id) }}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"></span>Edit</a>
-          </td>
-          <td>  
-          <a href="{{ route('periods.index', $match->id) }}" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-pencil"></span>Periodes</a>
-          </td>
-          @else
-          <td></td>
-          <td></td>
-          @endif
+           
+          @if($match->deleted_at ==null)
+          
+            <td>
+              <a href="javascript:void(0)" data-idmatch="{{$match->id}}" class="btn btn-default btn-sm btndelete" data-token="{{ csrf_token() }}">
+                Delete
+              </a> 
+            </td>
+            <td>       
+              <a href="{{ route('match.edit', $match->id) }}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"></span>Edit</a>
+            </td>
+            <td>  
+              <a href="{{ route('periods.index', $match->id,'match') }}" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-pencil"></span>Periodes <span class="badge">{{ $match->periods->count() }}</span></a>
+            </td>
+            @else
+            <td></td>
+            <td></td>
+            <td></td>
+            @endif
         </tr>
         @endforeach
       </tbody>
