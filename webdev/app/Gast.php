@@ -9,11 +9,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Gast extends Model
 {
-    use SoftDeletes;
-    protected $cascadeDeletes = ['images'];
+
     
   
-
+    use SoftDeletes;
     protected $dates = ['deleted_at'];
     
     public function images()

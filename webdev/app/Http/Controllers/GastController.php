@@ -12,7 +12,10 @@ use Cookie;
 
 class GastController extends Controller
 {
-  
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $gasts = Gast::withTrashed()->get();
@@ -95,7 +98,7 @@ class GastController extends Controller
           ];
           $rules=[
             'name' => 'bail|required|string',
-            'email' => 'bail|required|email',
+            'email' => 'bail|required|email|unique:gasts,email',
            
           ];
           $validator = Validator::make($verbraucher, $rules);

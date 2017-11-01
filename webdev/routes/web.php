@@ -13,16 +13,17 @@
 
 
 //Route::resource('/', 'MatchesController');
+
 Route::get('periods/{id}',['as' => 'periods.index', 'uses' => 'PeriodsController@index']);
 Route::post('periods/{id}', ['as' => 'periods.store', 'uses' => 'PeriodsController@store']);
 Route::get('periods/{id}/edit', ['uses' => 'PeriodsController@edit', 'as' => 'periods.edit']);
 Route::put('periods/{id}', ['uses' => 'PeriodsController@update', 'as' => 'periods.update']);
 Route::delete('/periods/{id}/delete', ['as' => 'periods.delete','uses' => 'PeriodsController@delete']);
-
 Route::resource('match', 'MatchesController');
 // Route::delete('/match/{id}/restore', ['as' => 'match.restore','uses' => 'MatchesController@restore']);
 
 Route::resource('/', 'HomeController');
+Route::get('/test', 'HomeController@test');
 
 Route::post('like', 'LikeController@like');
 
@@ -63,3 +64,12 @@ Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm'
 Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
+// send an email to "batman@batcave.io"
+use App\Mail\KryptoniteFound;
+
+Route::get('/sendmail', function () {
+    // send an email to "batman@batcave.io"
+    Mail::to('mdke@ymail.com')->send(new KryptoniteFound);
+
+    return 'hello' . time();
+});

@@ -2,7 +2,6 @@
 
 namespace App\Console;
 
-use App\Console\Commands\EndMatch;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -14,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        EndMatch::class
+         '\App\Console\Commands\CronJob',
     ];
 
     /**
@@ -24,19 +23,18 @@ class Kernel extends ConsoleKernel
      * @return void
      */
     protected function schedule(Schedule $schedule)
-    {
-      //  $schedule->command('end:match')->everyMinute();
+    {        
+        $schedule->command('CronJob:cronjob')
+                 ->everyMinute();
     }
 
     /**
-     * Register the commands for the application.
+     * Register the Closure based commands for the application.
      *
      * @return void
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
-
         require base_path('routes/console.php');
     }
 }

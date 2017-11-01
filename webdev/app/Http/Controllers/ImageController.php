@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Redirect;
 use Carbon\Carbon;
 use Auth;
 use Excel;
+use App\Period;
+use App\Mail\KryptoniteFound;
+
 
 class ImageController extends Controller
 {
@@ -24,6 +27,7 @@ class ImageController extends Controller
 
     public function index($id=0)
     {
+
         $this->checkMatch();
         if($id){
             $images =Image::withCount('likes')->with('gast')->where('id',$id)->get();
@@ -48,25 +52,28 @@ class ImageController extends Controller
   
     public function store(Request $request)
     {
-        $this->checkMatch();
-        $this->validate($request, [
-            'image' => 'required|image|mimes:jpeg,bmp,jpg,png|max:5000'
-        ]);
-        $idGeust = $this->checkGeust($request->ip());
-        if ($idGeust == false) {
-            return redirect('/Guest/create');
+     
+            $this->checkMatch();
+            $this->validate($request, [
+                'image' => 'required|image|mimes:jpeg,bmp,jpg,png|max:5000'
+            ]);
+            $idGeust = $this->checkGeust($request->ip());
+            if ($idGeust == false) {
+                return redirect('/Guest/create');
+            }
+            $image = new Image();
+            // dd($request);
+            if ($request->hasFile('image')) :
+                $image->path = $request->image->store('images');
+                $image->gast_id = $idGeust;
+                $image->match_id = $this->idMatch;
+                $image->save();
+                return redirect('/image')->with('Success', 'successfully saved');
+            endif;
+            return Back()->with('Errors', 'Error');
         }
-        $image = new Image();
-        // dd($request);
-        if ($request->hasFile('image')) :
-            $image->path = $request->image->store('images');
-            $image->gast_id = $idGeust;
-            $image->match_id = $this->idMatch;
-            $image->save();
-            return redirect('/image')->with('Success', 'successfully saved');
-        endif;
-        return Back()->with('Errors', 'Error');
-    }
+        
+    
     
     public function delete($id)
     {
@@ -122,9 +129,14 @@ class ImageController extends Controller
 
     private function checkMatch()
     {
+        // Get today
         $today = \Carbon\Carbon::today()->format('Y/m/d');
-        $match = Match::where('start_at', '<=', $today)
-        ->where('end_at', '>=', $today)->first();
+          
+        // Get today's match
+        $match = Match::whereHas('periods', function($query) use ($today){
+            $query->where('start', '>=' , $today )
+            ->where('end', '>=' , $today );
+        })->first();
         
         if ($match == null) {
             Redirect::to('/')->send();
@@ -145,7 +157,7 @@ class ImageController extends Controller
     public function invite(Request $request)
     {
         if ($request->ajax()) {
-            $ip = $request->ip();
+             $ip = $request->ip();
             $ck =isset($_COOKIE['xvz'])?$_COOKIE['xvz']:'';
             $gast =  Gast::where('ip', $ip)
             ->orwhere('cookies', $ck)->first();
@@ -190,17 +202,8 @@ class ImageController extends Controller
                 }
             } else {
                 return 'redirect';
-            }
-          
-           
-            
-           
-
-
-
-            // return 'ok';
-            // return 'redirect';
-            // return 'email';
-        }
+            } 
+	 
+        } 
     }
 }
