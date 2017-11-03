@@ -29,19 +29,19 @@
               <div class="item active">
                 <img src="{{asset('/images/blok-1.jpg')}}" alt="First Slide">
                 <div class="carousel-caption d-none d-md-block">
-    <p>name fo winner 1</p>
+
   </div>
               </div>
               <div class="item">
                 <img src="{{asset('/images/blok-2.jpg')}}" alt="Second Slide">
                                 <div class="carousel-caption d-none d-md-block">
-    <p>name fo winner 2</p>
+
   </div>
               </div>
               <div class="item">
                 <img src="{{asset('/images/blok-3.jpg')}}" alt="Third Slide">
                                 <div class="carousel-caption d-none d-md-block">
-    <p>name fo winner 3</p>
+ 
   </div>
               </div>
             </div>

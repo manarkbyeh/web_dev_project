@@ -48,10 +48,12 @@ class Match extends Model
         Match::deleting(function ($offer) {
             $offer->images()->delete();
             $offer->likes()->delete();
+            $offer->periods()->delete();
         });
         
         // Match::restoring(function ($offer) {
         //        $offer->images()->restore();
         // });
     }
+ 
 }

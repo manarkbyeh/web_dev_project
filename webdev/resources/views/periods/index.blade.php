@@ -33,7 +33,7 @@
           
             <td>
          
-              <a href="javascript:void(0)" data-idmatch="{{$period->id}}" class="btn btn-default btn-sm btndelete" data-token="{{ csrf_token() }}">
+              <a href="javascript:void(0)" data-idperiod="{{$period->id}}" class="btn btn-default btn-sm btndelete" data-token="{{ csrf_token() }}">
                 Delete
               </a> 
             </td>
@@ -71,7 +71,7 @@
    {!! Form::open(array('route' => ['periods.store', $match->id], 'data-parsley-validate' => '','method' => 'Post','id'=>'myForm')) !!}
 
   {{ Form::label('title', "Post Title:") }} {{ Form::text('title', null, array('class' =>
-    'form-control')) }} 
+    'form-control','required' => 'required')) }} 
     
   {{ Form::label('start', 'start At:') }}
   {!! Form::datetimeLocale('start', null, ['required' => 'required']) !!}
@@ -110,7 +110,8 @@
       }).then(function() {
         $.ajax({
           type: "post",
-          url: "{{ url('periods')}}" + '/' + val.attr("data-idmatch"),
+          url: "{{ url('periods')}}" + '/' + val.attr("data-idperiod"),
+         
           data: {
             _method: 'delete',
             _token: token

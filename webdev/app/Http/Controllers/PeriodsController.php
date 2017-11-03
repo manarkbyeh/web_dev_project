@@ -125,7 +125,7 @@ class PeriodsController extends Controller
         return redirect()->back();
     }
     
-    public function destroy($id)
+    public function delete($id)
     {
         if($period = Period::withTrashed()->where('id', $id)->first()){
             if ($period != null && $period->deleted_at == null) {
@@ -135,7 +135,7 @@ class PeriodsController extends Controller
                 return "no";
             }
         } else {
-            session()->flash('error', 'Match not found !!');
+            session()->flash('error', 'Period not found !!');
         }
        
         // Redirect to matches index page.

@@ -19,7 +19,8 @@ class MatchesController extends Controller
     {
       
         $matches = Match::withTrashed()->get();
-        return view("home.index", ["matches"=>$matches]);
+        $matche = Match::all();
+        return view("home.index", ["matches"=>$matches,"matche"=>$matche]);
     }
     
     public function create()

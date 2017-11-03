@@ -1,5 +1,5 @@
 @extends('main') @section('title', '| Edit Matches')
-@section('stylesheets') {!! Html::style('css/parsley.css') !!} @endsection
+
 @section('content')
 
  {!! Form::model($match , ['route' => ['match.update',  $match->id], 'method' => 'PUT','id'=>'myForm']) !!}
@@ -10,7 +10,7 @@
  </div>
  {!! Form::close() !!}
 <!-- end of .row (form) -->
-@endsection @section('script') {!! Html::script('js/parsley.min.js') !!}
+@endsection @section('script') 
 
 <script>
   $(document).ready(function() {

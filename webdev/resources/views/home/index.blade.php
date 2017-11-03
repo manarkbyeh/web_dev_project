@@ -1,4 +1,4 @@
-@extends('main') @section('title', '| All Gast') @section('content')
+@extends('main') @section('title', '| All Gast') @section('stylesheets') {!! Html::style('css/parsley.css') !!} @endsection  @section('content')
 <div class="row">
   <div class="col-md-10">
     <h1>All Matches</h1>
@@ -16,8 +16,7 @@
         <th>Title</th>
         <th>Inhoud</th>
         <th>Conditions</th>
-        <th>Start</th>
-        <th>End</th>
+  
         <th>Actions</th>
       </thead>
       <tbody>
@@ -25,10 +24,9 @@
         <tr  @if($match->deleted_at !=null) class="deleted" @elseif($match->win_image_id) class="old" @endif>
           <td>{{ $match->id }}</td>
           <td> {{ substr(strip_tags($match->title), 0, 50) }}{{ strlen(strip_tags($match->title)) > 50 ? "..." : "" }}</td>
-          <td> {{ substr(strip_tags($match->body), 0, 30) }}{{ strlen(strip_tags($match->body)) > 30 ? "..." : "" }}</td>
-          <td>{{ substr(strip_tags($match->condition), 0, 30) }}{{ strlen(strip_tags($match->condition)) > 30 ? "..." : "" }}</td>
-          <td>{{ date('M j, Y', strtotime($match->start_at)) }}</td>
-          <td>{{ date('M j, Y', strtotime($match->end_at)) }}</td>
+          <td> {{ substr(strip_tags($match->body), 0, 50) }}{{ strlen(strip_tags($match->body)) > 30 ? "..." : "" }}</td>
+          <td>{{ substr(strip_tags($match->condition), 0, 50) }}{{ strlen(strip_tags($match->condition)) > 30 ? "..." : "" }}</td>
+       
            
           @if($match->deleted_at ==null)
           
@@ -36,11 +34,9 @@
               <a href="javascript:void(0)" data-idmatch="{{$match->id}}" class="btn btn-default btn-sm btndelete" data-token="{{ csrf_token() }}">
                 Delete
               </a> 
-            </td>
-            <td>       
+               
               <a href="{{ route('match.edit', $match->id) }}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"></span>Edit</a>
-            </td>
-            <td>  
+        
               <a href="{{ route('periods.index', $match->id,'match') }}" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-pencil"></span>Periodes <span class="badge">{{ $match->periods->count() }}</span></a>
             </td>
             @else
@@ -55,7 +51,19 @@
   </div>
 </div>
 
-@endsection; @section('script')
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+  @if($matche->count() < 1)
+    <h1>Create New match</h1>
+    <hr> {!! Form::open(array('route' => 'match.store', 'data-parsley-validate' => '','method' => 'Post','id'=>'myForm')) !!}
+    {{ Form::label('title', "Post Title:") }} {{ Form::text('title', null, array('class' =>
+    'form-control','required' => 'required')) }} {{ Form::label('body', "Post Body:") }} {{ Form::textarea('body', null, array('class' => 'form-control','required' => 'required')) }} {{ Form::label('condition', "Conditions:") }} {{ Form::text('condition', null, array('class' => 'form-control','required' => '','id'=>'tagInput','data-role='=>'tagsinput'))
+    }} {{ Form::button('Create Post', array('class' => 'btn btn-success btn-lg btn-block','id'=>'btn', 'style' => 'margin-top: 20px;')) }} {!! Form::close() !!}
+    @endif
+  </div>
+</div>
+
+@endsection @section('script') {!! Html::script('js/parsley.min.js') !!}
 <script>
   $(document).ready(function() {
     $("body").on("click", ".btndelete", function() {
@@ -111,7 +119,14 @@
         });
       }
     });
+  
+    $('#btn').click(function(event) {
+      $('#myForm').submit();
+   
   });
+});
+  $('#tagInput').tagsinput();
+
 </script>
 
 
