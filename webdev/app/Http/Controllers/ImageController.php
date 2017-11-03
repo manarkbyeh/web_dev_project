@@ -64,7 +64,9 @@ class ImageController extends Controller
             $image = new Image();
             // dd($request);
             if ($request->hasFile('image')) :
-                $image->path = $request->image->store('images');
+               $request->image->move(public_path('storage/images/'), $request->image->getClientOriginalName());
+                
+                $image->path = $request->image->getClientOriginalName();
                 $image->gast_id = $idGeust;
                 $image->match_id = $this->idMatch;
                 $image->save();
@@ -147,7 +149,7 @@ class ImageController extends Controller
 
     public function win()
     {
-        $winners = Match::where('win_image_id', '>', 0)->with(['image' => function ($query) {
+        $winners = Period::where('win_image_id', '>', 0)->with(['image' => function ($query) {
             $query->with('gast');
         }])->paginate(5);
         return view("images.winImage", ["winners" =>$winners

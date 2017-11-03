@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Match;
+use App\Period;
+
 use Illuminate\Support\Facades\Auth;
 
 class MatchesController extends Controller
@@ -15,6 +17,7 @@ class MatchesController extends Controller
    
     public function index()
     {
+      
         $matches = Match::withTrashed()->get();
         return view("home.index", ["matches"=>$matches]);
     }

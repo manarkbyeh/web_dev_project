@@ -13,21 +13,22 @@ use App\Match;
 use App\Period;
 use Mail;
 use Excel;
-class CronJob extends Command
+
+class EndMatch extends Command
 {
-      /**
+    /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'CronJob:cronjob';
+    protected $signature = 'end:match';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'User Name Change Successfully';
+    protected $description = 'end of the match and set the winner';
 
     /**
      * Create a new command instance.

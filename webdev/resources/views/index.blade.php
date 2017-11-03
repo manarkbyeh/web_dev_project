@@ -18,11 +18,13 @@
           <div class="widget-title">
             <h3>Winners</h3>
           </div>
+          @if(!empty($winners) and count($winners) > 0)
            @foreach($winners as $winner)
             <ul>
              <li>{{$winner->image->gast->name}}</li>
            </ul>
           @endforeach
+        @endif
           @if($winners->count())
             <div class="row">
             <div class="col-md-12">
@@ -47,9 +49,9 @@
           <div class="blog-title">
             <div class="meta-date">
             @if($match !=null)            
-              <span class="meta-date-day">{{date('d', strtotime( $match->start_at))}}</span>
-              <span class="meta-date-month">{{date('m', strtotime( $match->start_at))}}</span>
-              <span class="meta-date-year">{{date('Y', strtotime( $match->start_at))}}</span>
+              <span class="meta-date-day">{{date('d', strtotime( $period->start))}}</span>
+              <span class="meta-date-month">{{date('m', strtotime( $period->start))}}</span>
+              <span class="meta-date-year">{{date('Y', strtotime( $period->start))}}</span>
             @else
               <span class="meta-date-day">{{date('d')}}</span>
               <span class="meta-date-month">{{date('m')}}</span>
@@ -62,9 +64,9 @@
             </div>
             @if($match !=null)
             <div class="meta-date   meta-date2">
-              <span class="meta-date-day">{{date('d', strtotime( $match->end_at))}}</span>
-              <span class="meta-date-month">{{date('m', strtotime( $match->end_at))}}</span>
-              <span class="meta-date-year">{{date('Y', strtotime( $match->end_at))}}</span>
+              <span class="meta-date-day">{{date('d', strtotime( $period->end))}}</span>
+              <span class="meta-date-month">{{date('m', strtotime( $period->end))}}</span>
+              <span class="meta-date-year">{{date('Y', strtotime( $period->end))}}</span>
             </div>
             @endif
           </div>

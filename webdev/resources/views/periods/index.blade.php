@@ -110,7 +110,7 @@
       }).then(function() {
         $.ajax({
           type: "post",
-          url: "periods/" + val.attr("data-idmatch"),
+          url: "{{ url('periods')}}" + '/' + val.attr("data-idmatch"),
           data: {
             _method: 'delete',
             _token: token

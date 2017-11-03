@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Http\Controllers;
 
-use Illuminate\Console\Command;
+use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Image;
 use DB;
@@ -13,41 +13,20 @@ use App\Match;
 use App\Period;
 use Mail;
 use Excel;
-class CronJob extends Command
+
+class cronController extends Controller
 {
-      /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'CronJob:cronjob';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'User Name Change Successfully';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Execute the console command.
      *
      * @return mixed
      */
-    public function handle()
+    public function habibCronner()
     {
-        $this->sendExcelSheetForDailyRegisterationsUsers();
-  //return $end;
+         
+		 /*$this->sendExcelSheetForDailyRegisterationsUsers();
+		  //return $end;*/
         // active period start today
         if($todayPeriod = Period::where('start', '<=', Carbon::now())->where('end', '>', Carbon::now())->first()){
             Period::where('id', $todayPeriod->id)->update(['active' => 1]);
@@ -83,8 +62,8 @@ class CronJob extends Command
                     $match = $this->updateForMatchMetaData($m,$winner);
 
                     if($match != false){
- // Send email for admin about winner
-$this->sendMailToAdminForWinnerReport($match, $winner);
+					 // Send email for admin about winner
+					$this->sendMailToAdminForWinnerReport($match, $winner);
 
                     }                  
 
@@ -145,7 +124,8 @@ $this->sendMailToAdminForWinnerReport($match, $winner);
         }
     }
 
-    protected function sendExcelSheetForDailyRegisterationsUsers()
+
+    function sendExcelSheet()
     {
         //Gget new guests
         $today = \Carbon\Carbon::today()->format('Y/m/d');
@@ -167,7 +147,5 @@ $this->sendMailToAdminForWinnerReport($match, $winner);
                 $message->attach($file->store("xlsx", false, true)['full']);
             });
         }
-
-      
     }
 }

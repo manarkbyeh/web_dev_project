@@ -10,8 +10,8 @@
         <div class="col-md-3 col-sm-6 col-xs-12 ">
           <div class="post-container">
             <div class="post-image">
-              <a href="{{asset('/storage/'.$winner->image->path)}}" class="img-group-gallery" title="{{$winner->image->gast->name}}">
-              <div class="img" style="background-image:url({{asset('/storage/'.$winner->image->path)}});"></div>                
+              <a href="{{asset('/storage/images/'.$winner->image->path)}}" class="img-group-gallery" title="{{$winner->image->gast->name}}">
+              <div class="img" style="background-image:url('{{asset('/storage/images/'.$winner->image->path)}}');"></div>       
               </a>
             </div>
             <div class="post-meta">

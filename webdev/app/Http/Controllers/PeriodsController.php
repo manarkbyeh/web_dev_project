@@ -109,7 +109,7 @@ class PeriodsController extends Controller
     ]);
 
         if($period = Period::find($id)){
-            $match->update([
+            $period->update([
                 'title' => $request->get('title'),
                 'start' => $request->get('start'),
                 'end' => $request->get('end'),
@@ -122,7 +122,7 @@ class PeriodsController extends Controller
 
 
         // Redirect to periods index page.
-        return redirect()->route('periods.index', $id);
+        return redirect()->back();
     }
     
     public function destroy($id)

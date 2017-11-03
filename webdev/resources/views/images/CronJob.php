@@ -3,16 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Carbon\Carbon;
-use App\Image;
-use DB;
-use App\Winner;
-use App\Gast;
-use App\Like;
-use App\Match;
-use App\Period;
-use Mail;
-use Excel;
+
 class CronJob extends Command
 {
       /**
@@ -170,4 +161,6 @@ $this->sendMailToAdminForWinnerReport($match, $winner);
 
       
     }
+}
+
 }

@@ -21,20 +21,19 @@ class HomeController extends Controller
     {
         // Get today
         $now = Carbon::now();
-
+      
         // Get today's match
         $match = Match::whereHas('periods', function($query) use ($now){
             $query->where('start', '<=' , $now )
             ->where('end', '>' , $now );
         })->first();
-  
-        // Get Match winners and Image and gast
+        $period =  Period::where('start', '<=', Carbon::now())->where('end', '>', Carbon::now())->first();
+        // Get Match winners a+nd Image and gast
         $winners = Period::where('win_image_id', '>', 0)->with(['image' => function ($query) {
             $query->with('gast');
         }])->limit(5)->get();
     
-
-        return view("index", compact('match', 'winners'));
+        return view("index", compact('match', 'winners','period'));
     }
     public function test()
     {

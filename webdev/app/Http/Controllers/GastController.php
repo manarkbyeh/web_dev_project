@@ -14,7 +14,7 @@ class GastController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except('create','handleProviderCallback','redirectToProvider');
     }
     public function index()
     {
@@ -74,6 +74,8 @@ class GastController extends Controller
     
     public function delete($id)
     {
+
+        
         $gast = Gast::withTrashed()->where('id',$id)->first();
         if($gast != null && $gast->deleted_at == null){
             $gast->delete();
