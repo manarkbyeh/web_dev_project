@@ -9,6 +9,9 @@ use Session;
 use Carbon\Carbon;
 use Socialite;
 use Cookie;
+use App\Match;
+use App\Period;
+use Illuminate\Support\Facades\Redirect;
 
 class GastController extends Controller
 {
@@ -17,7 +20,7 @@ class GastController extends Controller
         $this->middleware('auth')->except('create','handleProviderCallback','redirectToProvider');
     }
     public function index()
-    {
+    { $this->checkMatch();
         $gasts = Gast::withTrashed()->get();
         return view("manageGast.index", ["gasts"=>$gasts]);
     }
@@ -49,6 +52,7 @@ class GastController extends Controller
   
     public function store(Request $request)
     {
+        $this->checkMatch();
         $ip =  $request->ip();
         $mytime = Carbon::now();
         $cok= md5($mytime->toDateTimeString());
@@ -71,7 +75,23 @@ class GastController extends Controller
         }
         redirect::back()->with('errors', 'Something went wrong , try again');
     }
-    
+    private function checkMatch()
+    {
+        // Get today
+        $today = \Carbon\Carbon::today()->format('Y/m/d');
+          
+        // Get today's match
+        $match = Match::whereHas('periods', function($query) use ($today){
+            $query->where('start', '>=' , $today )
+            ->where('end', '>=' , $today );
+        })->first();
+        
+        if ($match == null) {
+            Redirect::to('/')->send();
+        } else {
+            $this->idMatch = $match->id;
+        }
+    }
     public function delete($id)
     {
 

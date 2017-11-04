@@ -24,8 +24,8 @@
         <tr  @if($match->deleted_at !=null) class="deleted" @elseif($match->win_image_id) class="old" @endif>
           <td>{{ $match->id }}</td>
           <td> {{ substr(strip_tags($match->title), 0, 50) }}{{ strlen(strip_tags($match->title)) > 50 ? "..." : "" }}</td>
-          <td> {{ substr(strip_tags($match->body), 0, 50) }}{{ strlen(strip_tags($match->body)) > 30 ? "..." : "" }}</td>
-          <td>{{ substr(strip_tags($match->condition), 0, 50) }}{{ strlen(strip_tags($match->condition)) > 30 ? "..." : "" }}</td>
+          <td> {{ substr(strip_tags($match->body), 0, 30) }}{{ strlen(strip_tags($match->body)) > 30 ? "..." : "" }}</td>
+          <td>{{ substr(strip_tags($match->condition), 0, 30) }}{{ strlen(strip_tags($match->condition)) > 30 ? "..." : "" }}</td>
        
            
           @if($match->deleted_at ==null)

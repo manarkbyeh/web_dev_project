@@ -25,7 +25,7 @@ class MatchesController extends Controller
     
     public function create()
     {
-        return view('home.create');
+    
     }
    
     public function store(Request $request)

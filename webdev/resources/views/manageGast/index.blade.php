@@ -15,6 +15,9 @@
         <th>#</th>
         <th>Name</th>
         <th>email</th>
+        <th>ip</th>
+        <th>cookies</th>
+        
         <th>Created At</th>
         <th></th>
       </thead>
@@ -24,6 +27,8 @@
           <th>{{ $gast->id }}</th>
           <td>{{ $gast->name }}</td>
           <td>{{ $gast->email }}</td>
+          <td>{{ $gast->ip }}</td>
+          <td>{{ $gast->cookies }}</td>
           <td>{{ date('M j, Y', strtotime($gast->created_at)) }}</td>
           <td>
             @if($gast->deleted_at ==null)

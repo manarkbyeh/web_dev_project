@@ -12,6 +12,7 @@
         </div>
       </div>
     </div>
+    
     <div class="col-md-12">
       <div class="post-container">
         <div class="post-content">
@@ -37,6 +38,27 @@
         </div>
       </div>
     </div>
+    @if(Auth::check() && Auth::user())
+    <div class="col-md-12">
+      <div class="post-container">
+        <div class="post-content">
+          <div class="widget-title">
+          <h3>Match Toevoegen</h3>
+          </div>
+     
+            <div class="row">
+            <div class="col-md-12">
+              <div class="col-md-4 col-md-offset-2 centered ">
+              <a href="{{url('/match')}}" class="btn btn-lg btn-default">Match Toevoegen</a>
+              </div>
+            </div>
+          </div>
+    
+        </div>
+      </div>
+    </div>
+    @endif
+
   </div>
 </div>
 

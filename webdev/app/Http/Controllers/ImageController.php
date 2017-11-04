@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
-
+use Illuminate\Support\Facades\Mail;
 use App\Image;
 use App\Gast;
 use App\Like;
