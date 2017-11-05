@@ -55,17 +55,30 @@
     <div class="col-md-8 col-md-offset-2">
         @if($matche->count() < 1)
         <h1>Create New match</h1>
-        <hr> {!! Form::open(array('route' => 'match.store', 'data-parsley-validate' => '','method' => 'Post','id'=>'myForm')) !!}
-        {{ Form::label('title', "Post Title:") }} {{ Form::text('title', null, array('class' =>
-    'form-control','required' => 'required')) }} {{ Form::label('body', "Post Body:") }} {{ Form::textarea('body', null, array('class' => 'form-control','required' => 'required')) }} {{ Form::label('condition', "Conditions:") }} {{ Form::text('condition', null, array('class' => 'form-control','required' => '','id'=>'tagInput','data-role='=>'tagsinput'))
-        }} {{ Form::button('Create Post', array('class' => 'btn btn-success btn-lg btn-block','id'=>'btn', 'style' => 'margin-top: 20px;')) }} {!! Form::close() !!}
+        <hr> {!! Form::open(array('route' => 'match.store','method' => 'Post','id'=>'myForm')) !!}
+        <div class="form-group  has-feedback">
+        {{ Form::label('title', "Post Titel:") }} {{ Form::text('title', null, array('class' =>
+    'form-control','required' => 'required')) }}
+        </div>
+        <div class="form-group  has-feedback">
+     {{ Form::label('body', "Omschrijven:") }} {{ Form::textarea('body', null, array('class' => 'form-control','required' => 'required')) }} 
+        </div>
+        <div class="form-group  has-feedback">
+     {{ Form::label('condition', "Voorwaarden:") }} {{ Form::text('condition', null, array('class' => 'form-control','required' => '','id'=>'tagInput','data-role='=>'tagsinput'))
+        }}
+    </div>
+         {{ Form::button('Create Post', array('class' => 'btn btn-success btn-lg btn-block','id'=>'btn', 'style' => 'margin-top: 20px;')) }} {!! Form::close() !!}
         @endif
     </div>
 </div>
 
-@endsection @section('script') {!! Html::script('js/parsley.min.js') !!}
+@endsection @section('script')
+<script type="text/javascript" src="{{ asset('js/jquery-validation/jquery.validate.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
 <script>
     $(document).ready(function () {
+
+
         $("body").on("click", ".btndelete", function () {
             var val = $(this);
             var token = $(this).data('token');
@@ -127,6 +140,42 @@
         });
     });
     $('#tagInput').tagsinput();
+    $('#myForm').validate({
+            
+            rules: {
+                title: {
+                  required: true,
+                },
+                
+
+                body: {
+                  required: true,
+
+                },
+                condition: {
+                  required: true,
+
+                },
+             
+
+            },
+            
+            messages: {
+              title : 'moet een titel bevatten.',
+              body : 'moet een Omschrijven bevatten.',
+              condition : 'moet een voorwaarden bevatten.'
+                
+            },
+        highlight: function (input) {
+            $(input).parent().addClass('error');
+        },
+        unhighlight: function (input) {
+            $(input).parent().removeClass('error');
+        },
+
+
+    
+        });
 
 </script>
 

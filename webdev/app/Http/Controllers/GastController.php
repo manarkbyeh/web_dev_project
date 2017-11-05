@@ -44,7 +44,7 @@ class GastController extends Controller {
             }
             return redirect('/image');
         }
-        return view('inschrijven');
+        return view('manageGast.inschrijven');
     }
 
     public function store(Request $request) {

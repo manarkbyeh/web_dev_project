@@ -119,13 +119,13 @@ class ImageController extends Controller {
 
     private function checkMatch() {
         // Get today
-        $today = \Carbon\Carbon::today()->format('Y/m/d');
-
+        $now = Carbon::now();
+    
         // Get today's match
-        $match = Match::whereHas('periods', function($query) use ($today) {
-                    $query->where('start', '>=', $today)
-                            ->where('end', '>=', $today);
-                })->first();
+        $match = Match::whereHas('periods', function($query) use ($now) {
+            $query->where('start', '<=', $now)
+                    ->where('end', '>', $now);
+        })->first();
 
         if ($match == null) {
             Redirect::to('/')->send();

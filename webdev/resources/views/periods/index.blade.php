@@ -1,4 +1,4 @@
-@extends('main') @section('title', '| Create New Post') @section('stylesheets') {!! Html::style('css/parsley.css') !!} @endsection @section('content')
+@extends('main') @section('title', '| Create New Post')  @section('content')
 
 
 <div class="row">
@@ -68,18 +68,20 @@
 
         <hr>
 
-        {!! Form::open(array('route' => ['periods.store', $match->id], 'data-parsley-validate' => '','method' => 'Post','id'=>'myForm')) !!}
-
+        {!! Form::open(array('route' => ['periods.store', $match->id],'method' => 'Post','id'=>'period')) !!}
+        <div class="form-group  has-feedback">
         {{ Form::label('title', "Post Title:") }} {{ Form::text('title', null, array('class' =>
     'form-control','required' => 'required')) }} 
-
+        </div>
+        <div class="form-group  has-feedback">
         {{ Form::label('start', 'start At:') }}
         {!! Form::datetimeLocale('start', null, ['required' => 'required']) !!}
-
+        </div>
+        <div class="form-group  has-feedback">
         {{ Form::label('end', 'End At:') }}
         {!! Form::datetimeLocale('end', null, ['required' => 'required']) !!}
 
-
+        </div>
         {{ Form::submit('Create Period', ['class' => 'btn btn-success btn-block']) }}
 
         {!! Form::close() !!}
@@ -89,10 +91,47 @@
 
 
 
-@endsection @section('script') {!! Html::script('js/parsley.min.js') !!}
-
+@endsection @section('script') 
+<script type="text/javascript" src="{{ asset('js/jquery-validation/jquery.validate.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
 <script>
     $(document).ready(function () {
+        $('#period').validate({
+            
+            rules: {
+                title: {
+                  required: true,
+                },
+                
+
+                start: {
+                  required: true,
+
+                },
+                end: {
+                  required: true,
+
+                },
+             
+
+            },
+            
+            messages: {
+              title : 'moet een title bevatten.',
+              start : 'moet een start bevatten.',
+              end : 'moet een end bevatten.'
+                
+            },
+        highlight: function (input) {
+            $(input).parent().addClass('error');
+        },
+        unhighlight: function (input) {
+            $(input).parent().removeClass('error');
+        },
+
+
+    
+        });
 
         $("body").on("click", ".btndelete", function () {
             var val = $(this);

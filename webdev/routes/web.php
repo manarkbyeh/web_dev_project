@@ -1,7 +1,5 @@
 <?php
 
-use DB;
-
 /*
   |--------------------------------------------------------------------------
   | Web Routes
@@ -74,11 +72,7 @@ Route::get('/sendmail', function () {
     return 'hello' . time();
 });
 
-Route::get('/habibCron', function () {
-    DB::table('users')
-            ->where('id', 1)
-            ->update(['name' => str_random(10)]);
-});
+
 
 Route::get('/sendExel', 'cronController@sendExcelSheet');
 Route::get('/peroidCron', 'cronController@habibCronner');

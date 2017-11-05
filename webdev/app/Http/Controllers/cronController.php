@@ -13,6 +13,7 @@ use App\Match;
 use App\Period;
 use Mail;
 use Excel;
+use App\User;
 
 class cronController extends Controller
 {
@@ -78,19 +79,19 @@ class cronController extends Controller
     {
         
         $image = Image::where('id', $winner)->first();
-
+        $admin = User::where('id', 1)->first();
         $winner = Gast::where('id', $image->gast_id)->first();
         
         if ($match->win_image_id > 0) {
-            \Mail::send('email.guestWinner', ['Gast' =>$winner], function ($message) use ($winner, $match) {
+            \Mail::send('email.guestWinner', ['Gast' => $winner], function ($message) use ($winner, $match, $admin) {
                 $message->from('mdke@ymail.com', 'Admin1');
-                $message->to($winner->email, $winner->name)->subject($match->title)->cc($match->user->email);
+                $message->to($winner->email, $winner->name)->subject($match->title)->cc($admin->email);
             });
             Image::where('deleted_at', null)->delete();
         } else {
-            \Mail::send('email.noWinner', ['Gast' =>$winner], function ($message) use ($winner, $match) {
+            \Mail::send('email.noWinner', ['Gast' => $winner], function ($message) use ($winner, $match, $admin) {
                 $message->from('mdke@ymail.com', 'Admin');
-                $message->to($match->user->email)->subject($match->title);
+                $message->to($admin->email)->subject($match->title);
             });
         }
     }

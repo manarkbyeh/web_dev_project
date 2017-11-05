@@ -27,8 +27,9 @@ class MatchesController extends Controller {
     public function store(Request $request) {
         // validation
         $this->validate($request, [
-            'title' => 'required',
-            'body' => 'required',
+            'title' => 'required|max:255',
+            'body' => 'required|max:255',
+            'condition'=>'required|max:255',
         ]);
 
         // Let's create new match
@@ -60,8 +61,9 @@ class MatchesController extends Controller {
     public function update(Request $request, $id) {
         // validation
         $this->validate($request, [
-            'title' => 'required',
-            'body' => 'required',
+            'title' => 'required|max:255',
+            'body' => 'required|max:255',
+            'condition'=>'required|max:255',
         ]);
 
         if ($match = Match::find($id)) {
