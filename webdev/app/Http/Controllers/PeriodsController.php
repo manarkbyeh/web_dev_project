@@ -6,17 +6,15 @@ use Illuminate\Http\Request;
 use App\Period;
 use App\Match;
 
-class PeriodsController extends Controller
-{
-    public function __construct()
-    {
+class PeriodsController extends Controller {
+
+    public function __construct() {
         $this->middleware('auth');
     }
 
-    public function index($id)
-    {
+    public function index($id) {
         // Find match
-        if(! $match = Match::find($id)){
+        if (!$match = Match::find($id)) {
             return abort(404);
         }
 
@@ -25,7 +23,7 @@ class PeriodsController extends Controller
 
         // Get latest period
         $latestPeriod = Period::orderBy('end', 'DESC')->first();
-    
+
         // Let's view periods list.
         return view("periods.index", compact('periods', 'match', 'latestPeriod'));
     }
@@ -36,32 +34,30 @@ class PeriodsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    
-    public function store(Request $request, $id)
-    {
+    public function store(Request $request, $id) {
         // Find match
-        if(! $match = Match::find($id)){
+        if (!$match = Match::find($id)) {
             return abort(404);
         }
 
 
-        if($match->periods->count() < 4){
+        if ($match->periods->count() < 4) {
             // validation
-            $this->validate($request,[
-                'title'     => 'required',
-                'start'     => 'required|date|after_or_equal:'.\Carbon\Carbon::today(),
-                'end'       => 'required|date|after_or_equal:start_at',
+            $this->validate($request, [
+                'title' => 'required',
+                'start' => 'required|date|after_or_equal:' . \Carbon\Carbon::today(),
+                'end' => 'required|date|after_or_equal:start_at',
             ]);
 
             // Check if this period not added to this match before.
-            if($res = Period::whereBetween('start', [$request->start, $request->end])->orWhereBetween('end', [$request->start, $request->end])->count()){
+            if ($res = Period::whereBetween('start', [$request->start, $request->end])->orWhereBetween('end', [$request->start, $request->end])->count()) {
                 return back()->withInput()->withErrors(['This period added  before !']);
             }
 
             // Get the latest period for this match
-            if($latestPeriod = Period::orderBy('end', 'DESC')->first()){
-                
-                if($latestPeriod->end >= $request->get('start') || $latestPeriod->end >= $request->get('end')){
+            if ($latestPeriod = Period::orderBy('end', 'DESC')->first()) {
+
+                if ($latestPeriod->end >= $request->get('start') || $latestPeriod->end >= $request->get('end')) {
                     return back()->withInput()->withErrors(['This period start/end is exist !']);
                 }
             }
@@ -73,42 +69,36 @@ class PeriodsController extends Controller
             // }else{
             //     $active = 0;
             // }
-
             // Add new period
-            if($match->periods()->create(['title' => $request->get('title'), 'start' => $request->start, 'end' => $request->get('end')])){
+            if ($match->periods()->create(['title' => $request->get('title'), 'start' => $request->start, 'end' => $request->get('end')])) {
                 session()->flash('success', 'Period added successfuly !!');
             } else {
                 session()->flash('error', 'Period not added successfully !!');
             }
-
         } else {
             session()->flash('error', 'You can not add more that 4 period per match !!');
         }
-        
-       
+
+
         // Redirect to periods list
         return redirect()->route('periods.index', $id);
     }
 
-   
-    public function edit($id)
-    {
+    public function edit($id) {
         $period = Period::find($id);
-        
+
         return view('periods.edit')->withPeriod($period);
     }
-    
-  
-    public function update(Request $request, $id)
-    {
-       // validation
-       $this->validate($request,[
-        'title'     => 'required',
-        'start'     => 'required|date|after_or_equal:'.\Carbon\Carbon::today(),
-        'end'       => 'required|date|after_or_equal:start_at',
-    ]);
 
-        if($period = Period::find($id)){
+    public function update(Request $request, $id) {
+        // validation
+        $this->validate($request, [
+            'title' => 'required',
+            'start' => 'required|date|after_or_equal:' . \Carbon\Carbon::today(),
+            'end' => 'required|date|after_or_equal:start_at',
+        ]);
+
+        if ($period = Period::find($id)) {
             $period->update([
                 'title' => $request->get('title'),
                 'start' => $request->get('start'),
@@ -124,21 +114,21 @@ class PeriodsController extends Controller
         // Redirect to periods index page.
         return redirect()->back();
     }
-    
-    public function delete($id)
-    {
-        if($period = Period::withTrashed()->where('id', $id)->first()){
+
+    public function delete($id) {
+        if ($period = Period::withTrashed()->where('id', $id)->first()) {
             if ($period != null && $period->deleted_at == null) {
                 $period->delete();
-                return  "ok";
+                return "ok";
             } else {
                 return "no";
             }
         } else {
             session()->flash('error', 'Period not found !!');
         }
-       
+
         // Redirect to matches index page.
         return redirect()->route('periods.index', $id);
     }
+
 }

@@ -60,6 +60,7 @@ class cronController extends Controller
 
                     // Get match
                     $match = $this->updateForMatchMetaData($m,$winner);
+                  
 
                     if($match != false){
 					 // Send email for admin about winner
@@ -83,7 +84,7 @@ class cronController extends Controller
         if ($match->win_image_id > 0) {
             \Mail::send('email.guestWinner', ['Gast' =>$winner], function ($message) use ($winner, $match) {
                 $message->from('mdke@ymail.com', 'Admin1');
-                $message->to($winner->email, $winner->name)->subject($match->title)->cc('mdke@ymail.com');
+                $message->to($winner->email, $winner->name)->subject($match->title)->cc($match->user->email);
             });
             Image::where('deleted_at', null)->delete();
         } else {
