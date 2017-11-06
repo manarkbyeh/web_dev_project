@@ -30,7 +30,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="col-md-4 col-md-offset-4 centered ">
-                                <a href="{{url('/image/win')}}" class="btn btn-lg btn-default">Show</a>
+                                <a href="{{url('/image/win')}}" class="btn btn-lg btn-default btn-pink">Show</a>
                             </div>
                         </div>
                     </div>
@@ -43,16 +43,23 @@
             <div class="post-container">
                 <div class="post-content">
                     <div class="widget-title">
-                        <h3>Match Toevoegen</h3>
+                        <h3></h3>
                     </div>
 
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="col-md-4 col-md-offset-2 centered ">
-                                <a href="{{url('/match')}}" class="btn btn-lg btn-default">Match Toevoegen</a>
+                            <div class="col-md-4 col-md-offset-4 centered ">
+                                <a href="{{url('/match')}}" class="btn btn-lg btn-default btn-pink">Show Match </a>
+                      
+                           
+
+                                <a href="{{url('/Guest')}}" class="btn btn-lg btn-default btn-pink" style = 'margin-top: 10px;'>Show Guest</a>
                             </div>
                         </div>
                     </div>
+
+
+       
 
                 </div>
             </div>
@@ -93,7 +100,7 @@
                         @endif
                     </div>
                     @if($match !=null)
-                    <img src="{{asset('images/background.jpg')}}" alt="" class="img-responsive">
+                    <img src="{{asset('images/background.png')}}" alt="" class="img-responsive">
                     <blockquote>{{ $match->body }}</blockquote>
                     @php $arr =explode(",", $match->condition); @endphp @if(count($arr)>0)
                     <h3>Conditions : </h3>

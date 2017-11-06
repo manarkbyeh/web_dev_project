@@ -1,4 +1,16 @@
 @extends('main') @section('title', '| Edit Periods')
+@section('stylesheets')
+<style>
+.error .error,
+.form-group>.error,
+.img_error {
+    color: red;
+    font-style: italic;
+    font-size: 11px;
+    font-weight: bold;
+}
+</style>
+ @endsection
 
 @section('content')
 
@@ -18,7 +30,7 @@
 {{ Form::label('end', 'End At:') }}
 {!! Form::datetimeLocale('end', date('Y-m-d\TH:i', strtotime($period->end))) !!}
 </div>
-{{ Form::submit('Create Period', array('class' => 'btn btn-success btn-lg btn-block','id'=>'btn', 'style' => 'margin-top: 20px;')) }} 
+{{ Form::submit('Period Wijzigen', array('class' => 'btn btn-lg btn-default btn-pink  btn-block','id'=>'btn', 'style' => 'margin-top: 20px;')) }} 
 
 {{ Form::close() }}
 
@@ -48,9 +60,9 @@
             },
             
             messages: {
-              title : 'moet een title bevatten.',
-              start : 'moet een start bevatten.',
-              end : 'moet een end bevatten.'
+              title : 'title field is required.',
+              start : 'start date and time field is required.',
+              end : 'end date and time field is required.'
                 
             },
         highlight: function (input) {

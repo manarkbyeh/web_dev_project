@@ -129,6 +129,7 @@ class cronController extends Controller
 
     function sendExcelSheet()
     {
+      
         //Gget new guests
         $today = \Carbon\Carbon::today()->format('Y/m/d');
         $export = Gast::select('id', 'name', 'email', 'created_at')
@@ -142,10 +143,10 @@ class cronController extends Controller
                     $sheet->fromArray($export);
                 });
             });
-            $match = Match::first();
-            \Mail::send('email.newUsers', [], function ($message) use ($file, $match) {
-                $message->from($match->user->email, 'Admin');
-                $message->to($match->user->email, $match->user->name )->subject('New Users');
+            $admin = User::where('id', 1)->first();
+            \Mail::send('email.newUsers', [], function ($message) use ($file, $admin) {
+                $message->from($admin->email, 'Admin');
+                $message->to($admin->email, $admin->name )->subject('New Users');
                 $message->attach($file->store("xlsx", false, true)['full']);
             });
         }

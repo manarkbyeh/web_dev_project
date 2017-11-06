@@ -20,7 +20,7 @@ class GastController extends Controller {
     }
 
     public function index() {
-        $this->checkMatch();
+       
         $gasts = Gast::withTrashed()->get();
         return view("manageGast.index", ["gasts" => $gasts]);
     }
@@ -44,7 +44,7 @@ class GastController extends Controller {
             }
             return redirect('/image');
         }
-        return view('manageGast.inschrijven');
+        return view('inschrijven');
     }
 
     public function store(Request $request) {

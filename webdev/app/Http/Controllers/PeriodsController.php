@@ -46,7 +46,7 @@ class PeriodsController extends Controller {
             $this->validate($request, [
                 'title' => 'required',
                 'start' => 'required|date|after_or_equal:' . \Carbon\Carbon::today(),
-                'end' => 'required|date|after_or_equal:start_at',
+                'end' => 'required|date|after_or_equal:start',
             ]);
 
             // Check if this period not added to this match before.

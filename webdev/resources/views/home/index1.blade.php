@@ -140,11 +140,7 @@
 
         });
     });
-    $.validator.addMethod("checkTags", function(value) { //add custom method
-        //Tags input plugin converts input into div having id #YOURINPUTID_tagsinput
-        //now you can count no of tags
-        return ($("#tagsx_tagsinput").find(".tag").length > 0);
-    });
+
     $('#tagInput').tagsinput();
     $('#myForm').validate({
             
@@ -158,20 +154,15 @@
                   required: true,
 
                 },
-                condition: {
-                  required: true,
-
-                },
-                
-                
+                condition: checkTags,
              
 
             },
             
             messages: {
-                title: 'title field is required.',
-                body: 'body field is required.',
-              condition : 'condition field is required.'
+              title : 'moet een titel bevatten.',
+              body : 'moet een Omschrijven bevatten.',
+              condition : 'moet een voorwaarden bevatten.'
                 
             },
         highlight: function (input) {
@@ -181,16 +172,7 @@
         unhighlight: function (input) {
             $(input).parent().removeClass('error');
         },
-        errorPlacement: function (error, element) {
-
-          if(element.attr("name") == "condition") {
-                error.appendTo($('.img_error'));
-            } else {
-              $(element).parent().append(error);
-
-            }    
-
-        },
+  
 
         });
 

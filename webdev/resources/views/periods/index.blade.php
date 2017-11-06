@@ -1,4 +1,17 @@
-@extends('main') @section('title', '| Create New Post')  @section('content')
+@extends('main') @section('title', '| Create New Post')
+@section('stylesheets')
+<style>
+.error .error,
+.form-group>.error,
+.img_error {
+    color: red;
+    font-style: italic;
+    font-size: 11px;
+    font-weight: bold;
+}
+</style>
+ @endsection
+  @section('content')
 
 
 <div class="row">
@@ -82,7 +95,7 @@
         {!! Form::datetimeLocale('end', null, ['required' => 'required']) !!}
 
         </div>
-        {{ Form::submit('Create Period', ['class' => 'btn btn-success btn-block']) }}
+        {{ Form::submit('Period Toevoegen', ['class' => 'btn btn-lg btn-default btn-pink  btn-block']) }}
 
         {!! Form::close() !!}
     </div>
@@ -96,42 +109,7 @@
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
 <script>
     $(document).ready(function () {
-        $('#period').validate({
-            
-            rules: {
-                title: {
-                  required: true,
-                },
-                
-
-                start: {
-                  required: true,
-
-                },
-                end: {
-                  required: true,
-
-                },
-             
-
-            },
-            
-            messages: {
-              title : 'moet een title bevatten.',
-              start : 'moet een start bevatten.',
-              end : 'moet een end bevatten.'
-                
-            },
-        highlight: function (input) {
-            $(input).parent().addClass('error');
-        },
-        unhighlight: function (input) {
-            $(input).parent().removeClass('error');
-        },
-
-
-    
-        });
+ 
 
         $("body").on("click", ".btndelete", function () {
             var val = $(this);
@@ -149,7 +127,7 @@
             }).then(function () {
                 $.ajax({
                     type: "post",
-                    url: "/periods/" + val.attr("data-idperiod"),
+                    url: "/periods/" + val.attr("data-idperiod") + "/delete",
 
                     data: {
                         _method: 'delete',
@@ -187,6 +165,37 @@
                     $(this).removeClass('animated ' + animationName);
                 });
             }
+        });
+        $('#period').validate({
+            
+            rules: {
+                title: {
+                  required: true,
+                },
+                
+
+                start: {
+                  required: true,
+
+                },
+                end: {
+                  required: true,
+
+                },
+             
+
+            },
+            
+            messages: {
+                title : 'title field is required.',
+                start : 'start date and time field is required.',
+                end : 'end date and time field is required.'
+                
+            },
+
+
+
+    
         });
     });
 
