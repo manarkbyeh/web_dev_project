@@ -4,17 +4,17 @@
         <div class="post-container">
             <div class="sidebar-menu">
                 <ul class="nav nav-pills nav-stacked">
-                    <li @if($active && $active == 'upload') class='active' @endif  ><a href="{{url('/image/upload')}}"><i class="fa fa-clock-o"></i> Add Picture</a></li>
-                    <li @if($active && $active == 'index') class='active' @endif  ><a href="{{url('/image')}}"><i class="fa fa-clock-o"></i> Newest</a></li>
-                    <li @if($active && $active == 'popular') class='active' @endif  ><a href="{{url('/image/popular')}}"><i class="fa fa-star-o"></i> Popular</a></li>
-                    <li @if($active && $active == 'last_image') class='active' @endif  ><a href="{{url('/image/last_image')}}"><i class="fa fa-certificate"></i> Last Image</a></li>
+                    <li @if($active && $active == 'upload') class='active' @endif  ><a href="{{url('/image/upload')}}"><i class="fa fa-plus" aria-hidden="true"></i> Add Picture</a></li>
+                    <li @if($active && $active == 'index') class='active' @endif  ><a href="{{url('/')}}"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+                    <li @if($active && $active == 'popular') class='active' @endif  ><a href="{{url('/image/popular')}}"><i class="fa fa-star"></i> Most Popular</a></li>
+                    <li @if($active && $active == 'last_image') class='active' @endif  ><a href="{{url('/image/last_image')}}"><i class="fa fa-certificate"></i> Newest Images</a></li>
                 </ul>
             </div>
         </div>
         <div class="post-container">
             <div class="post-content">
                 <div class="widget-title">
-                    <h3>Winners</h3>
+                    <h3>Examples</h3>
                 </div>
                 <div class="bs-example">
                     <div id="myCarousel" class="carousel slide" data-ride="carousel">

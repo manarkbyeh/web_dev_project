@@ -6,7 +6,7 @@
             <div class="post-container">
                 <div class="post-content">
                     <div class="widget-title">
-                        <h3>Logo</h3>
+                        <h3>This is the official website of</h3>
                     </div>
                     <img src="images/logo.jpeg" class="logo">
                 </div>
@@ -48,12 +48,12 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="col-md-4 col-md-offset-4 centered ">
-                                <a href="{{url('/match')}}" class="btn btn-lg btn-default btn-pink">Show Match </a>
+                            <div class="col-md-4 col-md-offset-2 centered ">
+                                <a href="{{url('/match')}}" class="btn btn-lg btn-default btn-pink">Show Competition </a>
                       
                            
 
-                                <a href="{{url('/Guest')}}" class="btn btn-lg btn-default btn-pink" style = 'margin-top: 10px;'>Show Guest</a>
+                                <a href="{{url('/Guest')}}" class="btn btn-lg btn-default btn-pink" style = 'margin-top: 10px;'>Show Guests</a>
                             </div>
                         </div>
                     </div>
@@ -88,7 +88,7 @@
                             @endif          
                         </div>
                         <div>
-                            <h2>@if($match !=null) {{ $match->title }} @else Comming soon @endif</h2>
+                            <h2>@if($match !=null) {{ $match->title }} @else Coming soon @endif</h2>
                             <small>By Manar </small>
                         </div>
                         @if($match !=null)
@@ -104,7 +104,7 @@
                     <blockquote>{{ $match->body }}</blockquote>
                     @php $arr =explode(",", $match->condition); @endphp @if(count($arr)>0)
                     <h3>Conditions : </h3>
-                    <p>Je moet eerste aan de volgende voorwaarden voldaan om deel te nemen aan de wedstrijd</p>
+                    <p>How do you participate?</p>
                     <ul>
                         @foreach($arr as $c)
                         <li>{{ $c }}</li>

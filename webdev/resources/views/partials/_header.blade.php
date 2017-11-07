@@ -9,7 +9,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{url('/')}}"><span>{{ config('app.name', 'Best') }}</span> Gallery</a>
+            <a class="navbar-brand" href="{{url('/')}}"><span></span></a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->

@@ -1,4 +1,5 @@
-@extends('main') @section('title', '| All Gast')  @section('content')
+@extends('main') @section('title', '| All Gast')
+  @section('content')
 <div class="row">
     <div class="col-md-10">
         <h1>All Matches</h1>
@@ -14,7 +15,7 @@
             <thead>
             <th>#</th>
             <th>Title</th>
-            <th>Inhoud</th>
+            <th>Content</th>
             <th>Conditions</th>
 
             <th>Actions</th>
@@ -50,7 +51,6 @@
         </table>
     </div>
 </div>
-
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
         @if($matche->count() < 1)
@@ -67,8 +67,10 @@
      {{ Form::label('condition', "Voorwaarden:") }} 
      {{ Form::text('condition', null, array('class' => 'form-control','required' => '','id'=>'tagInput','data-role='=>'tagsinput'))
         }}
+     
+        <div id="spans" style = 'margin-top: 10px;'></div>
     </div>
-         {{ Form::button('Match Toevoegen', array('class' => 'btn btn-lg btn-default btn-pink  btn-block','id'=>'btn', 'style' => 'margin-top: 20px;')) }} {!! Form::close() !!}
+         {{ Form::button('Add Competition', array('class' => 'btn btn-lg btn-default btn-pink  btn-block','id'=>'btn', 'style' => 'margin-top: 20px;')) }} {!! Form::close() !!}
         @endif
     </div>
 </div>
@@ -147,53 +149,48 @@
     });
     $('#tagInput').tagsinput();
     $('#myForm').validate({
-            
+        
             rules: {
                 title: {
-                  required: true,
+                    required: true,
                 },
-                
-
+        
                 body: {
-                  required: true,
-
+                    required: true,
+        
                 },
                 condition: {
-                  required: true,
-
-                },
-                
-                
-             
-
+                          required: true,
+        
+                        },
+                        
+        
+        
             },
-            
             messages: {
                 title: 'title field is required.',
                 body: 'body field is required.',
-              condition : 'condition field is required.'
-                
+                condition: 'condition field is required.'
+        
             },
-        highlight: function (input) {
-            console.log(input);
+        
+            highlight: function (input) {
             $(input).parent().addClass('error');
         },
         unhighlight: function (input) {
             $(input).parent().removeClass('error');
         },
-        errorPlacement: function (error, element) {
-
-          if(element.attr("name") == "condition") {
-                error.appendTo($('.img_error'));
-            } else {
-              $(element).parent().append(error);
-
-            }    
-
-        },
-
         });
-
+        $('#btn').click(function (e) {
+            $("#myForm").valid();
+            var spans = $('span.tag').length;
+            if (spans < 1) {
+                e.stopImmediatePropagation();
+                $('#spans').append('<span class="text-danger">condition field is required</span>');
+                return false;
+               
+            }
+        });
 </script>
 
 

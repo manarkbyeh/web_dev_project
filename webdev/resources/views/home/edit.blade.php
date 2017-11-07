@@ -13,11 +13,12 @@
         {{ Form::label('body', "Edit Body:") }} {{ Form::textarea('body', null, array('class' => 'form-control')) }}
     </div>
     <div class="form-group  has-feedback">
-        <div id="spans"></div>
-        {{ Form::label('condition', "Conditions:") }} {{ Form::text('condition', $match->condition, array('class' => 'form-control','id'=>'tagInput','data-role='=>'tagsinput'))
+     
+        {{ Form::label('condition', "Conditions:") }} {{ Form::text('condition', $match->condition, array('class' => 'form-control','id'=>'tagInput','data-role='=>'tagsinput' ,'required'=>''))
         }}
+        <div id="spans" style = 'margin-top: 10px;'></div>
     </div>
-    {{ Form::button('Edit Match', array('class' => 'btn btn-lg btn-default btn-pink btn-block','id'=>'btn', 'style' => 'margin-top: 20px;')) }}
+    {{ Form::button('Edit Competition', array('class' => 'btn btn-lg btn-default btn-pink btn-block','id'=>'btn', 'style' => 'margin-top: 20px;')) }}
 </div>
 {!! Form::close() !!}
 <!-- end of .row (form) -->
@@ -59,22 +60,27 @@ $('#myForm').validate({
     },
     messages: {
         title: 'title field is required.',
-        body: 'body field is required.',
+        body: 'body field is required.>',
         condition: 'condition field is required.'
 
     },
     highlight: function (input) {
-        $(input).parent().addClass('error');
-    },
-    unhighlight: function (input) {
-        $(input).parent().removeClass('error');
-    },
+            $(input).parent().addClass('error');
+        },
+        unhighlight: function (input) {
+            $(input).parent().removeClass('error');
+        },
+
+
 });
-$('#btn').click(function (event) {
+$('#btn').click(function (e) {
+    $("#myForm").valid();
     var spans = $('span.tag').length;
     if (spans < 1) {
-        $('#spans').html('<p> Error </p>').addClass('error');;
-        return event.preventDefault();
+        e.stopImmediatePropagation();
+        $('#spans').append('<span class="text-danger">condition field is required</span>');
+        return false;
+       
     }
 });
 

@@ -130,25 +130,26 @@ class cronController extends Controller
     function sendExcelSheet()
     {
       
-        //Gget new guests
-        $today = \Carbon\Carbon::today()->format('Y/m/d');
-        $export = Gast::select('id', 'name', 'email', 'created_at')
-        ->where('created_at', '>=', $today)
-        ->get();
-        if ($export->count()) {
-            //create exel file and send it
-            $file_name = 'New Users.'. md5(\Carbon\Carbon::now());
-            $file =  Excel::create($file_name, function ($excel) use ($export) {
-                $excel->sheet('Sheet 1', function ($sheet) use ($export) {
-                    $sheet->fromArray($export);
-                });
-            });
-            $admin = User::where('id', 1)->first();
-            \Mail::send('email.newUsers', [], function ($message) use ($file, $admin) {
-                $message->from($admin->email, 'Admin');
-                $message->to($admin->email, $admin->name )->subject('New Users');
-                $message->attach($file->store("xlsx", false, true)['full']);
-            });
-        }
+          //Gget new guests
+          $today = \Carbon\Carbon::today()->format('Y/m/d');
+          $export = Gast::select('id', 'name', 'email', 'created_at')
+          ->where('created_at', '>=', $today)
+          ->get();
+          if ($export->count()) {
+              //create exel file and send it
+              $file_name = 'New Users.'. md5(\Carbon\Carbon::now());
+              $file =  Excel::create($file_name, function ($excel) use ($export) {
+                  $excel->sheet('Sheet 1', function ($sheet) use ($export) {
+                      $sheet->fromArray($export);
+                  });
+              });
+              $admin = User::where('id', 1)->first();
+              \Mail::send('email.newUsers', [], function ($message) use ($file,  $admin) {
+                  $message->from( $admin->email, 'Admin');
+                  $message->to( $admin->email, $admin->name )->subject('New Users');
+                  $message->attach($file->store("xlsx", false, true)['full']);
+              });
+          }
+  
     }
 }

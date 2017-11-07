@@ -4,10 +4,11 @@
 .error .error,
 .form-group>.error,
 .img_error {
-    color: red;
-    font-style: italic;
-    font-size: 11px;
-    font-weight: bold;
+    color: #a94442;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    line-height: 26px;
+    font-weight: normal;
 }
 </style>
  @endsection
@@ -30,7 +31,7 @@
 {{ Form::label('end', 'End At:') }}
 {!! Form::datetimeLocale('end', date('Y-m-d\TH:i', strtotime($period->end))) !!}
 </div>
-{{ Form::submit('Period Wijzigen', array('class' => 'btn btn-lg btn-default btn-pink  btn-block','id'=>'btn', 'style' => 'margin-top: 20px;')) }} 
+{{ Form::submit('Edit Period', array('class' => 'btn btn-lg btn-default btn-pink  btn-block','id'=>'btn', 'style' => 'margin-top: 20px;')) }} 
 
 {{ Form::close() }}
 

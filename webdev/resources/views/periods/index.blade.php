@@ -1,18 +1,18 @@
-@extends('main') @section('title', '| Create New Post')
+@extends('main') @section('title', '| Edit Matches')
 @section('stylesheets')
 <style>
 .error .error,
 .form-group>.error,
 .img_error {
-    color: red;
-    font-style: italic;
-    font-size: 11px;
-    font-weight: bold;
+    color: #a94442;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    line-height: 26px;
+    font-weight: normal;
 }
 </style>
  @endsection
-  @section('content')
-
+@section('content')
 
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
@@ -95,7 +95,7 @@
         {!! Form::datetimeLocale('end', null, ['required' => 'required']) !!}
 
         </div>
-        {{ Form::submit('Period Toevoegen', ['class' => 'btn btn-lg btn-default btn-pink  btn-block']) }}
+        {{ Form::submit('Add Period', ['class' => 'btn btn-lg btn-default btn-pink  btn-block']) }}
 
         {!! Form::close() !!}
     </div>

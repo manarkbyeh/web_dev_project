@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Redirect;
 class GastController extends Controller {
 
     public function __construct() {
-        $this->middleware('auth')->except('create', 'handleProviderCallback', 'redirectToProvider');
+        $this->middleware('auth')->except('create', 'handleProviderCallback', 'redirectToProvider','store');
     }
 
     public function index() {
@@ -55,7 +55,9 @@ class GastController extends Controller {
 
         $this->validate($request, array(
             'name' => 'required|max:255',
-            'email' => 'required|email|unique:gasts,email'
+            'email' => 'required|email|unique:gasts,email',
+            'adress' => 'required|max:255',
+            'city' => 'required|max:255',
         ));
 
         // store in the database
@@ -63,6 +65,8 @@ class GastController extends Controller {
 
         $gast->name = $request->name;
         $gast->email = $request->email;
+        $gast->adress = $request->adress;
+        $gast->city = $request->city;
         $gast->ip = $ip;
         $gast->cookies = $cok;
         if ($gast->save()) {
@@ -74,13 +78,13 @@ class GastController extends Controller {
 
     private function checkMatch() {
         // Get today
-        $today = \Carbon\Carbon::today()->format('Y/m/d');
+        $now = Carbon::now();
 
         // Get today's match
-        $match = Match::whereHas('periods', function($query) use ($today) {
-                    $query->where('start', '>=', $today)
-                            ->where('end', '>=', $today);
-                })->first();
+        $match = Match::whereHas('periods', function($query) use ($now) {
+            $query->where('start', '<=', $now)
+                    ->where('end', '>', $now);
+        })->first();
 
         if ($match == null) {
             Redirect::to('/')->send();

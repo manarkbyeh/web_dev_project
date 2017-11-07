@@ -24,7 +24,7 @@ Route::put('periods/{id}', ['uses' => 'PeriodsController@update', 'as' => 'perio
 
 Route::delete('periods/{id}/delete', ['as' => 'periods.delete', 'uses' => 'PeriodsController@delete']);
 Route::resource('/', 'HomeController');
-Route::get('/test', 'HomeController@test');
+Route::get('/test', 'HomeController@sendExcelSheet');
 
 Route::post('like', 'LikeController@like');
 
@@ -62,15 +62,6 @@ Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail'
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
-// send an email to "batman@batcave.io"
-use App\Mail\KryptoniteFound;
-
-Route::get('/sendmail', function () {
-    // send an email to "batman@batcave.io"
-    $send = Mail::to('mdke@ymail.com')->send(new KryptoniteFound);
-    dd($send);
-    return 'hello' . time();
-});
 
 
 
