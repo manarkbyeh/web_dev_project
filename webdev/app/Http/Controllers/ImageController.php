@@ -181,6 +181,7 @@ class ImageController extends Controller {
                         'path' => $img->path,
                         'id_image' => $img->id
                     ];
+                    
                     \Mail::send('email.invite', ['data' => $data], function ($message) use ($img, $email) {
                         $message->from($img->gast->email, $img->gast->name);
                         $message->to($email)->subject("plz Like it");

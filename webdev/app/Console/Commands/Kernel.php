@@ -26,7 +26,6 @@ class Kernel extends ConsoleKernel
     {        
         $schedule->command('CronJob:cronjob')
                  ->everyMinute();
-                //  ->emailOutputTo('iciparisxlwedstrijd@gmail.com');
     }
 
     /**

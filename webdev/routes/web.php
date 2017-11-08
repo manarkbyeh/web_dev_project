@@ -62,7 +62,8 @@ Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail'
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
-
+ Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+ Route::post('register', 'Auth\RegisterController@register');
 
 
 Route::get('/sendExel', 'cronController@sendExcelSheet');

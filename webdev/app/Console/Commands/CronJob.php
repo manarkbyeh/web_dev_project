@@ -3,9 +3,10 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Image;
-use DB;
+//use DB;
 use App\Winner;
 use App\Gast;
 use App\Like;
@@ -13,6 +14,7 @@ use App\Match;
 use App\Period;
 use Mail;
 use Excel;
+use App\User;
 class CronJob extends Command
 {
       /**
@@ -46,71 +48,75 @@ class CronJob extends Command
      */
     public function handle()
     {
-        $this->sendExcelSheetForDailyRegisterationsUsers();
-  //return $end;
+               
+        //  $this->info('hhhhh');
+		//  $this->sendExcelSheet();
+		  //return $end;*/
         // active period start today
-        if($todayPeriod = Period::where('start', '<=', Carbon::now())->where('end', '>', Carbon::now())->first()){
-            Period::where('id', $todayPeriod->id)->update(['active' => 1]);
-            Period::where('id', '<>',  $todayPeriod->id)->update(['active' => 0]);
-        }
+        // if($todayPeriod = Period::where('start', '<=', Carbon::now())->where('end', '>', Carbon::now())->first()){
+        //     Period::where('id', $todayPeriod->id)->update(['active' => 1]);
+        //     Period::where('id', '<>',  $todayPeriod->id)->update(['active' => 0]);
+        // }
       
         
 
         
         // Start check winners of today period.
-        if($ifMatch = Period::whereDate('end', '<', Carbon::now())->first()){
+        // if($ifMatch = Period::whereDate('end', '<', Carbon::now())->first()){
         
-            // Check old  match winner
-            $m = Period::where('win_image_id', 0)->first();
+        //     // Check old  match winner
+        //     $m = Period::where('win_image_id', 0)->first();
 
-            if (count($m)) {
+        //     if (count($m)) {
 
-                // Get all image with countLikes
-                $images =Image::where('match_id', '=', $m->match_id)
-                ->with('gast')
-                ->withCount('likes')
-                ->orderBy('likes_count', 'desc')
-                ->get();
+        //         // Get all image with countLikes
+        //         $images =Image::where('match_id', '=', $m->match_id)
+        //         ->with('gast')
+        //         ->withCount('likes')
+        //         ->orderBy('likes_count', 'desc')
+        //         ->get();
          
-                //get max like
-                if (count($images)) {
+        //         //get max like
+        //         if (count($images)) {
                     
-                    // Get winner if have max likes and random if exist more guest have same likes
-                    $winner = $this->getWinner($images);
+        //             // Get winner if have max likes and random if exist more guest have same likes
+        //             $winner = $this->getWinner($images);
 
 
-                    // Get match
-                    $match = $this->updateForMatchMetaData($m,$winner);
+        //             // Get match
+        //             $match = $this->updateForMatchMetaData($m,$winner);
+                  
 
-                    if($match != false){
- // Send email for admin about winner
-$this->sendMailToAdminForWinnerReport($match, $winner);
+        //             if($match != false){
+		// 			 // Send email for admin about winner
+		// 			$this->sendMailToAdminForWinnerReport($match, $winner);
 
-                    }                  
+        //             }                  
 
-                }
-            }
+        //         }
+        //     }
             
-        }
+        // }
   
     }
     protected function sendMailToAdminForWinnerReport($match, $winner)
     {
         
         $image = Image::where('id', $winner)->first();
-
+        $admin = User::where('id', 1)->first();
         $winner = Gast::where('id', $image->gast_id)->first();
         
         if ($match->win_image_id > 0) {
-            \Mail::send('email.guestWinner', ['Gast' =>$winner], function ($message) use ($winner, $match) {
+          $v =   \Mail::send('email.guestWinner', ['Gast' => $winner], function ($message) use ($winner, $match, $admin) {
                 $message->from('mdke@ymail.com', 'Admin1');
-                $message->to($winner->email, $winner->name)->subject($match->title)->cc('mdke@ymail.com');
+                $message->to($winner->email, $winner->name)->subject($match->title)->cc($admin->email);
             });
+         
             Image::where('deleted_at', null)->delete();
         } else {
-            \Mail::send('email.noWinner', ['Gast' =>$winner], function ($message) use ($winner, $match) {
+            \Mail::send('email.noWinner', ['Gast' => $winner], function ($message) use ($winner, $match, $admin) {
                 $message->from('mdke@ymail.com', 'Admin');
-                $message->to($match->user->email)->subject($match->title);
+                $message->to($admin->email)->subject($match->title);
             });
         }
     }
@@ -145,29 +151,30 @@ $this->sendMailToAdminForWinnerReport($match, $winner);
         }
     }
 
-    protected function sendExcelSheetForDailyRegisterationsUsers()
-    {
-        //Gget new guests
-        $today = \Carbon\Carbon::today()->format('Y/m/d');
-        $export = Gast::select('id', 'name', 'email', 'created_at')
-        ->where('created_at', '>=', $today)
-        ->get();
-        if ($export->count()) {
-            //create exel file and send it
-            $file_name = 'New Users.'. md5(\Carbon\Carbon::now());
-            $file =  Excel::create($file_name, function ($excel) use ($export) {
-                $excel->sheet('Sheet 1', function ($sheet) use ($export) {
-                    $sheet->fromArray($export);
-                });
-            });
-            $match = Match::first();
-            \Mail::send('email.newUsers', [], function ($message) use ($file, $match) {
-                $message->from($match->user->email, 'Admin');
-                $message->to($match->user->email, $match->user->name )->subject('New Users');
-                $message->attach($file->store("xlsx", false, true)['full']);
-            });
-        }
 
+    function sendExcelSheet()
+    {
       
+          //Gget new guests
+          $today = \Carbon\Carbon::today()->format('Y/m/d');
+          $export = Gast::select('id', 'name', 'email', 'created_at')
+          ->where('created_at', '>=', $today)
+          ->get();
+          if ($export->count()) {
+              //create exel file and send it
+              $file_name = 'New Users.'. md5(\Carbon\Carbon::now());
+              $file =  Excel::create($file_name, function ($excel) use ($export) {
+                  $excel->sheet('Sheet 1', function ($sheet) use ($export) {
+                      $sheet->fromArray($export);
+                  });
+              });
+              $admin = User::where('id', 1)->first();
+              \Mail::send('email.newUsers', [], function ($message) use ($file,  $admin) {
+                  $message->from( $admin->email, 'Admin');
+                  $message->to( $admin->email, $admin->name )->subject('New Users');
+                  $message->attach($file->store("xlsx", false, true)['full']);
+              });
+          }
+  
     }
 }

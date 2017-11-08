@@ -15,8 +15,8 @@ return [
     */
 
     'mailgun' => [
-        'domain' => env('manar.kbyeh.mtantwerp.eu'),
-        'secret' => env('key-f09afe8a5c2d77bacaa5fa7da5cd16b8'),
+        'domain' => env('mail.kutub-pdf.com'),
+        'secret' => env('key-0ca75d26bbf43428a3d2b0e93f4eb7f7'),
     ],
 
     'ses' => [
