@@ -49,54 +49,54 @@ class CronJob extends Command
     public function handle()
     {
                
-        //  $this->info('hhhhh');
-		//  $this->sendExcelSheet();
-		  //return $end;*/
-        // active period start today
-        // if($todayPeriod = Period::where('start', '<=', Carbon::now())->where('end', '>', Carbon::now())->first()){
-        //     Period::where('id', $todayPeriod->id)->update(['active' => 1]);
-        //     Period::where('id', '<>',  $todayPeriod->id)->update(['active' => 0]);
-        // }
+         $this->info('hhhhh');
+		 $this->sendExcelSheet();
+		  return $end;*/
+        active period start today
+        if($todayPeriod = Period::where('start', '<=', Carbon::now())->where('end', '>', Carbon::now())->first()){
+            Period::where('id', $todayPeriod->id)->update(['active' => 1]);
+            Period::where('id', '<>',  $todayPeriod->id)->update(['active' => 0]);
+        }
       
         
 
         
-        // Start check winners of today period.
-        // if($ifMatch = Period::whereDate('end', '<', Carbon::now())->first()){
+        Start check winners of today period.
+        if($ifMatch = Period::whereDate('end', '<', Carbon::now())->first()){
         
-        //     // Check old  match winner
-        //     $m = Period::where('win_image_id', 0)->first();
+            // Check old  match winner
+            $m = Period::where('win_image_id', 0)->first();
 
-        //     if (count($m)) {
+            if (count($m)) {
 
-        //         // Get all image with countLikes
-        //         $images =Image::where('match_id', '=', $m->match_id)
-        //         ->with('gast')
-        //         ->withCount('likes')
-        //         ->orderBy('likes_count', 'desc')
-        //         ->get();
+                // Get all image with countLikes
+                $images =Image::where('match_id', '=', $m->match_id)
+                ->with('gast')
+                ->withCount('likes')
+                ->orderBy('likes_count', 'desc')
+                ->get();
          
-        //         //get max like
-        //         if (count($images)) {
+                //get max like
+                if (count($images)) {
                     
-        //             // Get winner if have max likes and random if exist more guest have same likes
-        //             $winner = $this->getWinner($images);
+                    // Get winner if have max likes and random if exist more guest have same likes
+                    $winner = $this->getWinner($images);
 
 
-        //             // Get match
-        //             $match = $this->updateForMatchMetaData($m,$winner);
+                    // Get match
+                    $match = $this->updateForMatchMetaData($m,$winner);
                   
 
-        //             if($match != false){
-		// 			 // Send email for admin about winner
-		// 			$this->sendMailToAdminForWinnerReport($match, $winner);
+                    if($match != false){
+					 // Send email for admin about winner
+					$this->sendMailToAdminForWinnerReport($match, $winner);
 
-        //             }                  
+                    }                  
 
-        //         }
-        //     }
+                }
+            }
             
-        // }
+        }
   
     }
     protected function sendMailToAdminForWinnerReport($match, $winner)
